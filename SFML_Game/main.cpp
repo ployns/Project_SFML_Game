@@ -61,19 +61,19 @@ int main()
         animation.Update(0, deltaTime);
         player.setTextureRect(animation.uvRect);
         
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && player.getPosition().x > -100)
         {
             player.move(-0.1f, 0.0f);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && player.getPosition().x < 800)
         {
             player.move(0.1f, 0.0f);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)&&player.getPosition().y > -30)
         {
             player.move(0.0f, -0.1f);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && player.getPosition().y < 590)
         {
             player.move(0.0f, 0.1f);
         }
@@ -89,7 +89,7 @@ int main()
             window.close();
         }
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 2; i++) //background
         {
             sf::Vector2f postion = background[i].getPosition();
             background[i].setPosition(postion.x += -0.05f, postion.y);
@@ -104,7 +104,7 @@ int main()
             }
         }
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 2; i++) //backdround1
         {
             sf::Vector2f postion = background1[i].getPosition();
             background1[i].setPosition(postion.x += -0.2f, postion.y);
