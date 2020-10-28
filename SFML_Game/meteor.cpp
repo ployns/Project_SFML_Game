@@ -1,11 +1,12 @@
 #include "meteor.h"
 
-meteor::meteor(float speed, float x, float y,sf::Color color)
+meteor::meteor(float speed, float x, float y,sf::Texture *texture)
 {
-	this->shape.setSize(sf::Vector2f(100,100));
+	this->shape.setScale(sf::Vector2f(100,100));
 	this->shape.setPosition(x, y);
-	this->shape.setFillColor(color);
 	this->speed = speed;
+	this->shape.setTexture(texture);
+	this->shape.setTextureRect(sf::IntRect(0,0,texture->getSize().x,texture->getSize().y));
 }
 
 meteor::~meteor()

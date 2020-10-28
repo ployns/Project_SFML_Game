@@ -4,7 +4,7 @@
 class meteor
 {
 public:
-	meteor(float speed,float x,float y,sf::Color color);
+	meteor(float speed,float x,float y,sf::Texture *texture);
 	~meteor();
 
 	void update(float x, float y);
