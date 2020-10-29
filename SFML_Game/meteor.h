@@ -10,6 +10,7 @@ public:
 	void update(float x, float y);
 	sf::RectangleShape getShape();
 
+
 private:
 	int hp;
 	float speed;

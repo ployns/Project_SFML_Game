@@ -1,52 +1,62 @@
-#include <SFML/Graphics.hpp>
+﻿#include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include<SFML\Audio.hpp>
 #include <iostream>
 #include "Animation.h"
 #include "meteor.h"
+#include "Fire.h"
 #include <vector>
 
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1080, 720), "SFML Tutorial", sf::Style::Close | sf::Style::Resize);//1080 720
-    sf::RectangleShape player(sf::Vector2f(216.0f, 180.0f)); //216 180
+    sf::RenderWindow window(sf::VideoMode(1080, 720), "SFML Tutorial", sf::Style::Close | sf::Style::Resize);//ขนาดจอ
+    sf::RectangleShape player(sf::Vector2f(216.0f, 180.0f)); //ขนาดมังกร
     player.setPosition(0.0f, 310.0f);
     sf::Texture playerTexture;
-    playerTexture.loadFromFile("dragon/dragon_total.png");
+    playerTexture.loadFromFile("dragon/dragon_total.png"); //sprite dragon
     player.setTexture(&playerTexture);
 
-    sf::Sprite bullet;
-    sf::Texture bulletTexture;
-    bulletTexture.loadFromFile("dragon/dragon_total.png");
-    bullet.setTexture(bulletTexture);
+    //sf::Sprite bullet;
+    //sf::Texture bulletTexture;
+    //bulletTexture.loadFromFile("dragon/dragon_total.png"); //sprite bullet
+    //bullet.setTexture(bulletTexture);
 
-    /*sf::Sprite meteor;
-    sf::Texture meteorTexture;
-    meteorTexture.loadFromFile("dragon/meteor.png");
-    meteor.setTexture(meteorTexture);
-    meteor.setPosition(800.0f, 0.0f);
-    meteor.setScale(0.4f, 0.4f);*/
+    sf::Texture fireTexture;
+    fireTexture.loadFromFile("dragon/dragon_total.png");
+    std::vector<Fire> fires;
+ 
 
-    sf::Texture BackgroundTexture[2];
+    sf::Texture BackgroundTexture[2]; //background
     sf::Sprite background[2];
     BackgroundTexture[0].loadFromFile("dragon/backgroundtree.png");
     background[0].setTexture(BackgroundTexture[0]);
     BackgroundTexture[1].loadFromFile("dragon/backgroundtree.png");
     background[1].setTexture(BackgroundTexture[1]);
 
+    sf::SoundBuffer buffer;
+    buffer.loadFromFile("dragon/sound fire.ogg");
+    sf::Sound shoot_sound;
+    shoot_sound.setBuffer(buffer);
+
+    sf::Music start_sound;
+    start_sound.openFromFile("dragon/sound start.ogg");
+
+
     /*std::vector<meteor*> meteors;
     meteors.push_back(new meteor(0.2, 1000, 300, &meteorsTexture));
     meteors.push_back(new meteor(0.2, 500, 300, &meteorsTexture));
     meteors.push_back(new meteor(0.2, 700, 300, &meteorsTexture));*/
 
-    /*meteor* m1 = new meteor(0.2, 1000, 300, sf::Color::Red);
-    meteor m2(0.2, 500, 300, sf::Color::Blue);*/
+    Fire fire(&playerTexture, sf::Vector2u(4, 6), 0.3f, sf::Vector2f(100, 100));
+
+    Animation animation(&playerTexture, sf::Vector2u(4, 6), 0.3f); //ตัดช่องของมังกร
 
 
-    Animation animation(&playerTexture, sf::Vector2u(4, 6), 0.3f);
-    Animation bulletanimation(&bulletTexture, sf::Vector2u(4, 6), 0.3f);
     float deltaTime = 0.0f;
     sf::Clock clock;
+
+    start_sound.play();
 
     while (window.isOpen())
     {
@@ -62,9 +72,14 @@ int main()
                     break;
             }
         }
+        for (Fire& fire : fires)
+            fire.Update(deltaTime);
+        fire.Update(deltaTime);
+        fire.Draw(window);
 
         animation.Update(0, deltaTime);
         player.setTextureRect(animation.uvRect);
+
 
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && player.getPosition().x > -100)
@@ -75,7 +90,7 @@ int main()
         {
             player.move(0.1f, 0.0f);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)&&player.getPosition().y > -30)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && player.getPosition().y > -30)
         {
             player.move(0.0f, -0.1f);
         }
@@ -86,8 +101,13 @@ int main()
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
         {
+            shoot_sound.play();
             animation.Update(3, deltaTime);
             player.setTextureRect(animation.uvRect);
+            fires.push_back(Fire(&playerTexture, sf::Vector2u(4, 6), 0.3f, sf::Vector2f(player.getPosition().x , player.getPosition().y)));
+            //Fire fire(&playerTexture, sf::Vector2u(4, 6), 0.3f, sf::Vector2f(player.getPosition().x, player.getPosition().y));
+            fire.Update(deltaTime);
+            
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -95,7 +115,7 @@ int main()
             window.close();
         }
 
-        for (int i = 0; i < 2; i++) //background
+        for (int i = 0; i < 2; i++) //background loop
         {
             sf::Vector2f postion = background[i].getPosition();
             background[i].setPosition(postion.x += -0.15f, postion.y);
@@ -120,9 +140,10 @@ int main()
 
         window.clear(sf::Color(240,185,246));
         window.draw(background[0]);
-        //window.draw(background1[0]);
         window.draw(player);
-        window.draw(bullet);
+        //for (Fire& fire : fires)
+        fire.Draw(window);
+        /*fire.Draw(window);*/
       /*  for (int i = 0; i < meteors.size();i++) {
             window.draw(meteors[i]->getShape());
         }*/
