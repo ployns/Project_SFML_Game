@@ -10,9 +10,17 @@ public:
 
 	void Update(float deltaTime);
 	void Draw(sf::RenderWindow& window);
+	void setActive(bool status);
+	bool isActive();
+
+	void setPosition(sf::Vector2f posi);
+	sf::Vector2f getPosition();
 
 private:
+	void move(float deltaTime);
+	bool active = false;
 	Animation Animation;
-	sf::Sprite fire;
-};
+	sf::Sprite body;
+	sf::RectangleShape shape;
 
+};

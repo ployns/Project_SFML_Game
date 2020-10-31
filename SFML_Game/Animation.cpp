@@ -18,8 +18,9 @@ Animation::~Animation()
 {
 }
 
-void Animation::Update(int row, float deltaTime)
+bool Animation::Update(int row, float deltaTime)
 {
+	//std::cout << currentImage.x << std::endl;
 	currentImage.y = row;
 	totalTime += deltaTime;
 
@@ -31,10 +32,16 @@ void Animation::Update(int row, float deltaTime)
 		if (currentImage.x >= imageCount.x)
 		{
 			currentImage.x = 0;
+			uvRect.left = currentImage.x * uvRect.width;
+			uvRect.top = currentImage.y * uvRect.height;
+			return true;
 		}
 	}
 
 	uvRect.left = currentImage.x * uvRect.width;
 	uvRect.top = currentImage.y * uvRect.height;
+	return false;
 
 }
+
+

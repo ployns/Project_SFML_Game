@@ -1,12 +1,13 @@
 #pragma once
 #include<SFML\Graphics.hpp>
+#include<iostream>
 class Animation
 {
 public:
 	Animation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime);
 	~Animation();
 
-	void Update(int row, float deltaTime);
+	bool Update(int row, float deltaTime);
 
 public:
 	sf::IntRect uvRect;
