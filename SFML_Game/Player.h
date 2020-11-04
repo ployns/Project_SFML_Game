@@ -10,6 +10,7 @@ public:
 	void Draw(sf::RenderWindow& window);
 	sf::Vector2f getPosition();
 	void actionAttack();
+	sf::Vector2f getHalfSize();
 private:
 	int state = 0;
 	void update();
@@ -19,5 +20,6 @@ private:
 	//for animation
 	float deltaTime = 0.0f;
 	sf::Clock clock;
+	
 };
 

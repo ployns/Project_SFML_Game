@@ -15,12 +15,23 @@ public:
 
 	void setPosition(sf::Vector2f posi);
 	sf::Vector2f getPosition();
+	void setY(double y);
 
+	//test
+	double getDeltaDistance();
+	void setEffect(int state);
+	int getEffect();
 private:
 	void move(float deltaTime);
 	bool active = false;
 	Animation Animation;
 	sf::Sprite body;
 	sf::RectangleShape shape;
+	
 
+	//test
+	double startPosition = 0;
+	int effect = 0;
+	double speed = 5;
+	double baseSpeed = 5;
 };

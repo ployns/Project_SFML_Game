@@ -5,19 +5,24 @@
 class Bullet
 {
 public:
-	Bullet(sf::Texture* texture);
+	Bullet(sf::Texture* texture, int *effect);
 	~Bullet();
 	void Draw(sf::RenderWindow& window);
+
 	sf::Vector2f positionPlayer;
 	sf::Event* evnt;
 	bool canAttack();
 private:
+	int* effect;
 	void action();
 	std::vector<Fire> fires;
-	int fire_num = 5;
+	int fire_num = 30;
 	float deltaTime = 0.0f;
 	sf::Clock clock;
 	// debug fire press
 	bool isSpacebarPrees = false;
+
+	// Test
+	int temp = 0;
 };
 

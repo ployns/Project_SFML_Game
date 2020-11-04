@@ -10,8 +10,11 @@
 
 int main()
 {
+    float speed = 1000;
+    float y = 0;
     int shoot=false;
     sf::RenderWindow window(sf::VideoMode(1080, 720), "SFML Tutorial", sf::Style::Close | sf::Style::Resize);//ขนาดจอ
+    window.setFramerateLimit(120 );
     sf::Texture playerTexture;
     playerTexture.loadFromFile("dragon/dragon_total.png"); //sprite dragon
     Player player(&playerTexture, sf::Vector2u(4, 6), 0.3f, sf::Vector2f(0.0f, 310.0f));
@@ -22,10 +25,12 @@ int main()
 
     sf::Texture itemGreenTexture;
     itemGreenTexture.loadFromFile("dragon/green.png");
-    Item itemGreen(&itemGreenTexture, sf::Vector2f(2000.0f, 310.0f));
-    
+    Item itemGreen(&itemGreenTexture, sf::Vector2f(2000.0f, 200.0f));
 
-    Bullet bulletList(&playerTexture);
+
+    int effect = 0;
+    double timeEffect = 0;
+    Bullet bulletList(&playerTexture, &effect);
 
     sf::Texture BackgroundTexture[2]; //background
     sf::Sprite background[2];
@@ -51,6 +56,7 @@ int main()
     sf::Event event;
     bulletList.evnt = &event;
     bool isSpacebarPrees = false;
+
     while (window.isOpen())
     {
         //ส่ง positionPlayer ไปยัง bulletList
@@ -87,14 +93,12 @@ int main()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
         {
             window.close();
-        }
-        itemGreen.move(deltaTime);
-        
+        } 
 
         for (int i = 0; i < 2; i++) //background loop
         {
             sf::Vector2f position = background[i].getPosition();
-            background[i].setPosition(position.x += -0.15f, position.y);
+            background[i].setPosition(position.x += -1.5f, position.y);
 
             if (position.x <= -3062)
             {
@@ -103,6 +107,20 @@ int main()
             else if (position.x >= 0)
             {
                 background[i].setPosition(-3062, position.y);
+            }
+        }
+        //std::cout << itemGreen.getPosition().x << std::endl;
+        if (itemGreen.checkColilistion(player.getPosition(), player.getHalfSize())) {
+            std::cout << "CHONNNNNNNNNNN" << std::endl;
+            itemGreen.setPosition(sf::Vector2f(-500, -500));
+            effect = 1;
+            timeEffect = 10;
+        }
+        if (effect == 1 && timeEffect > 0) {
+            timeEffect -= deltaTime;
+            //std::cout << timeEffect << std::endl;
+            if (timeEffect < 0) {
+                effect = 0;
             }
         }
         window.clear(sf::Color(240,185,246));
