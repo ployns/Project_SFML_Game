@@ -6,6 +6,7 @@
 #include "Player.h"
 #include <vector>
 #include "Bullet.h"
+#include "Item.h"
 
 int main()
 {
@@ -17,6 +18,12 @@ int main()
 
     sf::Texture fireTexture; //sprite fire
     fireTexture.loadFromFile("dragon/dragon_total.png");
+
+
+    sf::Texture itemGreenTexture;
+    itemGreenTexture.loadFromFile("dragon/green.png");
+    Item itemGreen(&itemGreenTexture, sf::Vector2f(2000.0f, 310.0f));
+    
 
     Bullet bulletList(&playerTexture);
 
@@ -81,6 +88,7 @@ int main()
         {
             window.close();
         }
+        itemGreen.move(deltaTime);
         
 
         for (int i = 0; i < 2; i++) //background loop
@@ -101,6 +109,7 @@ int main()
         window.draw(background[0]);
         bulletList.Draw(window);
         player.Draw(window);
+        itemGreen.Draw(window);
         window.display();
     }
  
