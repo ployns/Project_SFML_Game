@@ -10,7 +10,9 @@ public:
 	void Draw(sf::RenderWindow& window);
 	sf::Vector2f getPosition();
 	void actionAttack();
+	void actionTurbo();
 	sf::Vector2f getHalfSize();
+
 private:
 	int state = 0;
 	void update();

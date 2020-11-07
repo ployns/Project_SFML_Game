@@ -30,6 +30,12 @@ void Player::actionAttack()
     this->state = 3;
 }
 
+void Player::actionTurbo()
+{
+    this->state = 1;
+}
+
+
 sf::Vector2f Player::getHalfSize()
 {
     sf::Vector2u size = this->body.getTexture()->getSize();

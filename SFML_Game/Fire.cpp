@@ -79,7 +79,7 @@ int Fire::getEffect()
 void Fire::move(float deltaTime)
 {
 	
-	if (this->body.getPosition().x > 900) // 
+	if (this->body.getPosition().x > 900) 
 	{
 		this->setActive(false);
 	}

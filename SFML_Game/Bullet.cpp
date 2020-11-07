@@ -81,6 +81,14 @@ void Bullet::action()
                     this->fires[i + 1].setActive(true);
                     this->fires[i + 2].setActive(true);
                     break;
+                case 2:
+                    fires[i].setPosition(sf::Vector2f(this->positionPlayer.x, this->positionPlayer.y-50));
+                    fires[i + 1].setPosition(sf::Vector2f(this->positionPlayer.x+30, this->positionPlayer.y));
+                    fires[i + 2].setPosition(sf::Vector2f(this->positionPlayer.x, this->positionPlayer.y+50));
+                    this->fires[i].setActive(true);
+                    this->fires[i + 1].setActive(true);
+                    this->fires[i + 2].setActive(true);
+                    break;
                 default:
                     break;
                 }
