@@ -17,7 +17,6 @@ void Meteor::Draw(sf::RenderWindow& window)
 {
 	deltaTime = clock.restart().asSeconds();
 	if (this->body.getPosition().x > -500) {
-		
 		window.draw(body);
 		this->Update(deltaTime);
 		this->move(deltaTime);
