@@ -79,11 +79,11 @@ int main()
     meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1000.0f, -200.0f)));
     meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1200.0f, -300.0f)));
 
-    Menu manu(&menuTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
+    Menu menu(&menuTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
     Menu play(&playTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(80.0f, 120.0f));
     Menu howto(&howtoTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(60.0f, 300.0f));
     Menu highscore(&highscoreTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(80.0f, 480.0f));
-    Menu exit(&exitTexture, sf::Vector2f(1, 1), sf::Vector2f(900.0f, 540.0f));
+    Menu exit(&exitTexture, sf::Vector2f(1, 1), sf::Vector2f(900.0f, 530.0f));
 
 
     int effect = 0;
@@ -116,13 +116,36 @@ int main()
         }
 
         while (game == 0) { // menu
-            manu.Draw(window);
+            menu.Draw(window);
             play.Draw(window);
             howto.Draw(window);
             highscore.Draw(window);
             exit.Draw(window);
             window.display();
-
+            if (play.getGlobalBounds(window)) {
+                play.setScale(sf::Vector2f(0.7f,0.7f));
+            }
+            else {
+                play.setScale(sf::Vector2f(0.6f, 0.6f));
+            }
+            if (howto.getGlobalBounds(window)) {
+                howto.setScale(sf::Vector2f(0.7f, 0.7f));
+            }
+            else {
+                howto.setScale(sf::Vector2f(0.6f, 0.6f));
+            }
+            if (highscore.getGlobalBounds(window)) {
+                highscore.setScale(sf::Vector2f(0.7f, 0.7f));
+            }
+            else {
+                highscore.setScale(sf::Vector2f(0.6f, 0.6f));
+            }
+            if (exit.getGlobalBounds(window)) {
+                exit.setScale(sf::Vector2f(1.1f, 1.1f));
+            }
+            else { 
+                exit.setScale(sf::Vector2f(1.0f, 1.0f));
+            }
         }
 
 

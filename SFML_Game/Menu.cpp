@@ -20,3 +20,8 @@ void Menu::Draw(sf::RenderWindow& window)
 {
 	window.draw(body);
 }
+
+bool Menu::getGlobalBounds(sf::RenderWindow& window)
+{
+	return this->body.getGlobalBounds().contains(sf::Mouse::getPosition(window).x,sf::Mouse::getPosition(window).y);
+}

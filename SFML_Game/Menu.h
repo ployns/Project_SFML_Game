@@ -1,6 +1,7 @@
 #pragma once
 #include<SFML\Graphics.hpp>
 #include<iostream>
+#include <SFML/Window.hpp>
 class Menu
 {
 public:
@@ -8,6 +9,7 @@ public:
 	~Menu();
 	void setScale(sf::Vector2f scale);
 	void Draw(sf::RenderWindow& window);
+	bool getGlobalBounds(sf::RenderWindow& window);
 
 private:
 	sf::Sprite body;
