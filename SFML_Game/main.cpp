@@ -47,6 +47,8 @@ int main()
     highscoreTexture.loadFromFile("menu/highscore.png");
     sf::Texture exitTexture;
     exitTexture.loadFromFile("menu/exit.png");
+    sf::Texture howtoplayTexture;
+    howtoplayTexture.loadFromFile("menu/howtoplay.png");
 
     float speedBackground = -1.5;
     sf::Texture BackgroundTexture[2]; //background
@@ -75,17 +77,18 @@ int main()
     Item itemTurbo(&itemTurboTexture, sf::Vector2f(8000.0f, 100.0f));
 
     std::vector<Meteor> meteorlist;
-    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(900.0f, -100.0f)));
-    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1000.0f, -200.0f)));
-    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1200.0f, -300.0f)));
+    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1200.0f, -800.0f)));
+    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1400.0f, -1000.0f)));
+    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1700.0f, -1400.0f)));
 
     Menu menu(&menuTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
     Menu play(&playTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(80.0f, 120.0f));
     Menu howto(&howtoTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(60.0f, 300.0f));
     Menu highscore(&highscoreTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(80.0f, 480.0f));
     Menu exit(&exitTexture, sf::Vector2f(1, 1), sf::Vector2f(900.0f, 530.0f));
+    Menu howtoplay(&howtoplayTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
 
-
+    
     int effect = 0;
     double timeEffect = 0;
     Bullet bulletList(&playerTexture, &effect);
@@ -146,101 +149,131 @@ int main()
             else { 
                 exit.setScale(sf::Vector2f(1.0f, 1.0f));
             }
-        }
-
-
-        
-        if (event.type == sf::Event::EventType::TextEntered 
-            and event.text.unicode == ' '
-            and isSpacebarPrees == false)
-        {
-            //std::cout << "set isSpacebarPrees: true" << std::endl;
-            isSpacebarPrees = true;
-            if (bulletList.canAttack()) {
-                player.actionAttack();
-                shoot_sound.play();
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            {
+                if (play.getGlobalBounds(window)) {
+                    game = 1;
+                }
+                else if (howto.getGlobalBounds(window)) {
+                    game = 2;
+                }
+                else if (highscore.getGlobalBounds(window)) {
+                    game = 3;
+                }
+                else if (exit.getGlobalBounds(window)) {
+                    game = 4;
+                }
             }
         }
-        if (event.type == sf::Event::EventType::KeyReleased && isSpacebarPrees == true)
-        {
-            isSpacebarPrees = false;
-            //std::cout << "set isSpacebarPrees: false" << std::endl;
+
+        while (game == 2) {
+            howtoplay.Draw(window);
+            window.display();
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-        {
+        while (game == 3) { ////////////////////////////////////////////////// ยังไม่เสร็จ //////////////////////////////////////////////////
+
+        }
+
+        while (game == 4) {
             window.close();
-        } 
+        }
 
-        for (int i = 0; i < 2; i++) //background loop
-        {
-            sf::Vector2f position = background[i].getPosition();
-            background[i].setPosition(position.x += speedBackground, position.y);
 
-            if (position.x <= -3062){
-                background[i].setPosition(0, position.y);
+
+        while (game == 1) {
+            if (event.type == sf::Event::EventType::TextEntered
+                and event.text.unicode == ' '
+                and isSpacebarPrees == false)
+            {
+                //std::cout << "set isSpacebarPrees: true" << std::endl;
+                isSpacebarPrees = true;
+                if (bulletList.canAttack()) {
+                    player.actionAttack();
+                    shoot_sound.play();
+                }
             }
-            else if (position.x >= 0){
-                background[i].setPosition(-3062, position.y);
-             }
-        }
-        ////////////////////////////////// item ////////////////////////////////////////////////////////////////////
-        if (itemGreen.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemGreen
-            std::cout << "CHONNNNNNNNNNN" << std::endl;
-            itemGreen.setPosition(sf::Vector2f(-500, -500));
-            effect = 1;
-            timeEffect = 10;
-        }
-        if (itemPink.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemPink
-            std::cout << "CHONNNNNNNNNNN" << std::endl;
-            itemPink.setPosition(sf::Vector2f(-500, -500));
-            effect = 2;
-            timeEffect = 10;
-        }
-        if (itemTurbo.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemTurbo => 5/11/2020 6.06 PM
-            std::cout << "CHONNNNNNNNNNN" << std::endl;
-            itemTurbo.setPosition(sf::Vector2f(-500, -500));
-            effect = 3;
-            speedBackground = -5.0;
-            timeEffect = 5;
-        }
-
-        //////////////////////////////////////// Item Time up ///////////////////////////////////////////////////////////
-        if (effect == 1 && timeEffect > 0) {
-            timeEffect -= deltaTime;
-            //std::cout << timeEffect << std::endl;
-            if (timeEffect < 0) {
-                effect = 0;
+            if (event.type == sf::Event::EventType::KeyReleased && isSpacebarPrees == true)
+            {
+                isSpacebarPrees = false;
+                //std::cout << "set isSpacebarPrees: false" << std::endl;
             }
-        }
-        if (effect == 2 && timeEffect > 0) {
-            timeEffect -= deltaTime;
 
-            if (timeEffect < 0) {
-                effect = 0;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            {
+                window.close();
             }
-        }
-        if (effect == 3 && timeEffect > 0) {
-            timeEffect -= deltaTime;
-            player.actionTurbo();
-            //std::cout << timeEffect << std::endl;
-            if (timeEffect < 0) {
-                effect = 0;
-                speedBackground = -1.5;
-            }
-        }
 
-        ///////////////////////////////////// Draw /////////////////////////////////////////////////////////////
-        window.clear(sf::Color(240,185,246));
-        window.draw(background[0]);
-        bulletList.Draw(window);
-        player.Draw(window);
-        itemGreen.Draw(window);
-        itemPink.Draw(window);
-        itemTurbo.Draw(window);
-        for(Meteor& meteorlist : meteorlist)
-        meteorlist.Draw(window);
-        window.display();
+            for (int i = 0; i < 2; i++) //background loop
+            {
+                sf::Vector2f position = background[i].getPosition();
+                background[i].setPosition(position.x += speedBackground, position.y);
+
+                if (position.x <= -3062) {
+                    background[i].setPosition(0, position.y);
+                }
+                else if (position.x >= 0) {
+                    background[i].setPosition(-3062, position.y);
+                }
+            }
+            ////////////////////////////////// item ////////////////////////////////////////////////////////////////////
+            if (itemGreen.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemGreen
+                std::cout << "CHONNNNNNNNNNN" << std::endl;
+                itemGreen.setPosition(sf::Vector2f(-500, -500));
+                effect = 1;
+                timeEffect = 10;
+            }
+            if (itemPink.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemPink
+                std::cout << "CHONNNNNNNNNNN" << std::endl;
+                itemPink.setPosition(sf::Vector2f(-500, -500));
+                effect = 2;
+                timeEffect = 10;
+            }
+            if (itemTurbo.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemTurbo => 5/11/2020 6.06 PM
+                std::cout << "CHONNNNNNNNNNN" << std::endl;
+                itemTurbo.setPosition(sf::Vector2f(-500, -500));
+                effect = 3;
+                speedBackground = -5.0;
+                timeEffect = 5;
+            }
+
+            //////////////////////////////////////// Item Time up ///////////////////////////////////////////////////////////
+            if (effect == 1 && timeEffect > 0) {
+                timeEffect -= deltaTime;
+                //std::cout << timeEffect << std::endl;
+                if (timeEffect < 0) {
+                    effect = 0;
+                }
+            }
+            if (effect == 2 && timeEffect > 0) {
+                timeEffect -= deltaTime;
+
+                if (timeEffect < 0) {
+                    effect = 0;
+                }
+            }
+            if (effect == 3 && timeEffect > 0) {
+                timeEffect -= deltaTime;
+                player.actionTurbo();
+                //std::cout << timeEffect << std::endl;
+                if (timeEffect < 0) {
+                    effect = 0;
+                    speedBackground = -1.5;
+                }
+            }
+
+            ///////////////////////////////////// Draw /////////////////////////////////////////////////////////////
+            window.clear(sf::Color(240, 185, 246));
+            window.draw(background[0]);
+            bulletList.Draw(window);
+            player.Draw(window);
+            itemGreen.Draw(window);
+            itemPink.Draw(window);
+            itemTurbo.Draw(window);
+            for (Meteor& meteorlist : meteorlist)
+                meteorlist.Draw(window);
+            window.display();
+        }
     }
     return 0;
 }
