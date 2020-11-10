@@ -78,8 +78,8 @@ int main()
 
     std::vector<Meteor> meteorlist;
     meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1200.0f, -800.0f)));
-    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1400.0f, -1000.0f)));
-    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1700.0f, -1400.0f)));
+    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1600.0f, -1000.0f)));
+    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1800.0f, -1400.0f)));
 
     Menu menu(&menuTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
     Menu play(&playTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(80.0f, 120.0f));
@@ -117,8 +117,8 @@ int main()
                     break;
             }
         }
-
-        while (game == 0) { // menu
+        /////////////////////////////////////////////////////// menu /////////////////////////////////////////////////////////////
+        while (game == 0) { 
             menu.Draw(window);
             play.Draw(window);
             howto.Draw(window);
@@ -179,14 +179,14 @@ int main()
             window.close();
         }
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-        while (game == 1) {
+        //while (game == 1) {
             if (event.type == sf::Event::EventType::TextEntered
                 and event.text.unicode == ' '
                 and isSpacebarPrees == false)
             {
-                //std::cout << "set isSpacebarPrees: true" << std::endl;
+                std::cout << "set isSpacebarPrees: true" << std::endl;
                 isSpacebarPrees = true;
                 if (bulletList.canAttack()) {
                     player.actionAttack();
@@ -196,7 +196,7 @@ int main()
             if (event.type == sf::Event::EventType::KeyReleased && isSpacebarPrees == true)
             {
                 isSpacebarPrees = false;
-                //std::cout << "set isSpacebarPrees: false" << std::endl;
+                std::cout << "set isSpacebarPrees: false" << std::endl;
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -273,7 +273,7 @@ int main()
             for (Meteor& meteorlist : meteorlist)
                 meteorlist.Draw(window);
             window.display();
-        }
+        //}
     }
     return 0;
 }
