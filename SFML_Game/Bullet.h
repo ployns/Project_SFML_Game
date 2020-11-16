@@ -12,6 +12,7 @@ public:
 	sf::Vector2f positionPlayer;
 	sf::Event* evnt;
 	bool canAttack();
+
 private:
 	int* effect;
 	void action();

@@ -7,7 +7,7 @@ class Player
 public:
 	Player(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f position);
 	~Player();
-	void Draw(sf::RenderWindow& window);
+	void Draw(sf::RenderWindow& window,float _deltatime);
 	sf::Vector2f getPosition();
 	void actionAttack();
 	void actionTurbo();
@@ -15,7 +15,7 @@ public:
 
 private:
 	int state = 0;
-	void update();
+	void update(float deltaTime);
 	void controller();
 	Animation Animation;
 	sf::RectangleShape body;

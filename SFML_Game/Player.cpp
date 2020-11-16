@@ -12,9 +12,10 @@ Player::~Player()
 {
 }
 
-void Player::Draw(sf::RenderWindow& window)
+void Player::Draw(sf::RenderWindow& window, float _deltatime)
 {
-	this->update();
+	//this->update();
+    this->update(_deltatime);
 	window.draw(body);
     this->controller();
 	//std::cout << this->getPosition().x << std::endl; 
@@ -42,15 +43,14 @@ sf::Vector2f Player::getHalfSize()
     return sf::Vector2f(size.x / 4 / 2, size.y / 6 / 2);
 }
 
-void Player::update()
+void Player::update(float deltaTime)
 {
-    this->deltaTime = this->clock.restart().asSeconds();
-    if (this->Animation.Update(this->state, this->deltaTime) == true) 
+   // this->deltaTime = this->clock.restart().asSeconds();
+    if (this->Animation.Update(this->state, deltaTime) == true) 
     {
         this->state = 0;
     }
     this->body.setTextureRect(this->Animation.uvRect);
-   
 }
 
 void Player::controller()

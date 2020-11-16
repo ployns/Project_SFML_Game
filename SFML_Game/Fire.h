@@ -16,6 +16,7 @@ public:
 	void setPosition(sf::Vector2f posi);
 	sf::Vector2f getPosition();
 	void setY(double y);
+	void setScale(sf::Vector2f scale);
 
 	//test
 	double getDeltaDistance();

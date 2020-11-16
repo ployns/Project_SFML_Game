@@ -11,19 +11,19 @@ Item::~Item()
 {
 }
 
-void Item::Draw(sf::RenderWindow& window)
+void Item::Draw(sf::RenderWindow& window, float _deltatime)
 {
 	deltaTime = clock.restart().asSeconds();
 	if (this->body.getPosition().x > -500) {
 		window.draw(body);
-		this->move(deltaTime);
+		this->move(_deltatime);
 	}
 }
 
-void Item::move(float deltaTime)
+void Item::move(float deltatime)
 {
 	//std::cout << "Move" << std::endl;
-	this->body.move(sf::Vector2f(deltaTime * -300, sin(this->A-=0.005)));
+	this->body.move(sf::Vector2f(deltatime * -300, sin(this->A-=0.005)));
 }
 
 bool Item::checkColilistion(sf::Vector2f posPlayer, sf::Vector2f halfSizePlayer)

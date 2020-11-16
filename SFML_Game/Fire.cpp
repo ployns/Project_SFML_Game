@@ -55,6 +55,11 @@ void Fire::setY(double y)
 	this->body.setPosition(sf::Vector2f(this->body.getPosition().x, this->body.getPosition().y+y));
 }
 
+void Fire::setScale(sf::Vector2f scale)
+{
+	body.setScale(scale);
+}
+
 double Fire::getDeltaDistance()
 {
 	return this->body.getPosition().x - this->startPosition;

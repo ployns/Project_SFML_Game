@@ -8,7 +8,7 @@ class Item // => start: 4/11/2020 21.00PM.
 public:
 	Item(sf::Texture* texture, sf::Vector2f position);
 	~Item();
-	void Draw(sf::RenderWindow& window);
+	void Draw(sf::RenderWindow& window, float _deltatime);
 	bool checkColilistion(sf::Vector2f posPlayer, sf::Vector2f halfSizePlayer);
 	void setPosition(sf::Vector2f pos);
 	sf::Vector2f getPosition();

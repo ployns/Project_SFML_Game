@@ -7,7 +7,7 @@ class Meteor
 public:
 	Meteor(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f position);
 	~Meteor();
-	void Draw(sf::RenderWindow& window);
+	void Draw(sf::RenderWindow& window, float _deltatime);
 	bool checkColilistion(sf::Vector2f posPlayer, sf::Vector2f halfSizePlayer);
 	void setPosition(sf::Vector2f pos);
 	sf::Vector2f getPosition();

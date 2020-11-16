@@ -30,8 +30,8 @@ int main()
     sf::Texture meteorTexture; //sprite meteor
     meteorTexture.loadFromFile("dragon/meteor.png");
 
-    sf::Texture itemGreenTexture; // sprite green item
-    itemGreenTexture.loadFromFile("item/green.png");
+    //sf::Texture itemGreenTexture; // sprite green item
+    //itemGreenTexture.loadFromFile("item/green.png");
     sf::Texture itemPinkTexture; // sprite pink item
     itemPinkTexture.loadFromFile("item/pink.png");
     sf::Texture itemTurboTexture; // sprite pink item
@@ -49,6 +49,10 @@ int main()
     exitTexture.loadFromFile("menu/exit.png");
     sf::Texture howtoplayTexture;
     howtoplayTexture.loadFromFile("menu/howtoplay.png");
+    sf::Texture highscorebgTexture;
+    highscorebgTexture.loadFromFile("menu/highscorebg.png");
+    sf::Texture backTexture;
+    backTexture.loadFromFile("menu/back.png");
 
     float speedBackground = -1.5;
     sf::Texture BackgroundTexture[2]; //background
@@ -72,7 +76,8 @@ int main()
 
     Player player(&playerTexture, sf::Vector2u(4, 6), 0.3f, sf::Vector2f(0.0f, 310.0f));
     //Animation animation(&playerTexture, sf::Vector2u(4, 6), 0.3f); //ตัดช่องของมังกร
-    Item itemGreen(&itemGreenTexture, sf::Vector2f(2000.0f, 200.0f));
+
+    //Item itemGreen(&itemGreenTexture, sf::Vector2f(2000.0f, 200.0f));
     Item itemPink(&itemPinkTexture, sf::Vector2f(5000.0f, 400.0f));
     Item itemTurbo(&itemTurboTexture, sf::Vector2f(8000.0f, 100.0f));
 
@@ -87,6 +92,8 @@ int main()
     Menu highscore(&highscoreTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(80.0f, 480.0f));
     Menu exit(&exitTexture, sf::Vector2f(1, 1), sf::Vector2f(900.0f, 530.0f));
     Menu howtoplay(&howtoplayTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
+    Menu hightscorebg(&highscorebgTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
+    Menu back(&backTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(20.0f, 10.0f));
 
     
     int effect = 0;
@@ -104,21 +111,27 @@ int main()
 
     while (window.isOpen())
     {
-        //ส่ง positionPlayer ไปยัง bulletList
-        bulletList.positionPlayer = player.getPosition();       
-        deltaTime = clock.restart().asSeconds();
-        
-        while (window.pollEvent(event))
+        /*while (window.pollEvent(event))
         {
             switch (event.type)
             {
+            case sf::Event::Closed:
+                window.close();
+                break;
+            }
+        }*/
+
+        /////////////////////////////////////////////////////// menu /////////////////////////////////////////////////////////////
+        while (game == 0) { 
+            while (window.pollEvent(event))
+            {
+                switch (event.type)
+                {
                 case sf::Event::Closed:
                     window.close();
                     break;
+                }
             }
-        }
-        /////////////////////////////////////////////////////// menu /////////////////////////////////////////////////////////////
-        while (game == 0) { 
             menu.Draw(window);
             play.Draw(window);
             howto.Draw(window);
@@ -163,25 +176,65 @@ int main()
                 else if (exit.getGlobalBounds(window)) {
                     game = 4;
                 }
+                /*else if (play.getGlobalBounds(window)) {
+                    game = 0;
+                }*/
             }
         }
 
         while (game == 2) {
             howtoplay.Draw(window);
+            back.Draw(window);
             window.display();
+            if (back.getGlobalBounds(window)) {
+                back.setScale(sf::Vector2f(0.7f, 0.7f));
+            }
+            else {
+                back.setScale(sf::Vector2f(0.6f, 0.6f));
+            }
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)&& back.getGlobalBounds(window))
+            {
+                game = 0;
+            }
         }
 
         while (game == 3) { ////////////////////////////////////////////////// ยังไม่เสร็จ //////////////////////////////////////////////////
-
+            hightscorebg.Draw(window);
+            back.Draw(window);
+            window.display();
+            if (back.getGlobalBounds(window)) {
+                back.setScale(sf::Vector2f(0.7f, 0.7f));
+            }
+            else {
+                back.setScale(sf::Vector2f(0.6f, 0.6f));
+            }
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && back.getGlobalBounds(window))
+            {
+                game = 0;
+            }
         }
 
         while (game == 4) {
             window.close();
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //while (game == 1) {
+        ////////////////////////////////////////////////////////////// in Game ////////////////////////////////////////////////////////////////
+        deltaTime = clock.restart().asSeconds();
+        //std::cout << deltaTime;
+        //return 0;
+        while (game == 1) {
+            //std::cout << "ppppppppppppppppppppppppppppppppppppppppp" << std::endl;
+            bulletList.positionPlayer = player.getPosition();
+            deltaTime = clock.restart().asSeconds();
+            while (window.pollEvent(event))
+            {
+                switch (event.type)
+                {
+                case sf::Event::Closed:
+                    window.close();
+                    break;
+                }
+            }
             if (event.type == sf::Event::EventType::TextEntered
                 and event.text.unicode == ' '
                 and isSpacebarPrees == false)
@@ -196,6 +249,10 @@ int main()
             if (event.type == sf::Event::EventType::KeyReleased && isSpacebarPrees == true)
             {
                 isSpacebarPrees = false;
+                std::cout << "set isSpacebarPrees: false" << std::endl;
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+            {
                 std::cout << "set isSpacebarPrees: false" << std::endl;
             }
 
@@ -217,20 +274,21 @@ int main()
                 }
             }
             ////////////////////////////////// item ////////////////////////////////////////////////////////////////////
-            if (itemGreen.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemGreen
-                std::cout << "CHONNNNNNNNNNN" << std::endl;
-                itemGreen.setPosition(sf::Vector2f(-500, -500));
-                effect = 1;
-                timeEffect = 10;
-            }
+
+            //if (itemGreen.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemGreen
+            //    //std::cout << "CHONNNNNNNNNNN" << std::endl;
+            //    itemGreen.setPosition(sf::Vector2f(-500, -500));
+            //    effect = 1;
+            //    timeEffect = 10;
+            //}
             if (itemPink.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemPink
-                std::cout << "CHONNNNNNNNNNN" << std::endl;
+                //std::cout << "CHONNNNNNNNNNN" << std::endl;
                 itemPink.setPosition(sf::Vector2f(-500, -500));
                 effect = 2;
                 timeEffect = 10;
             }
             if (itemTurbo.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemTurbo => 5/11/2020 6.06 PM
-                std::cout << "CHONNNNNNNNNNN" << std::endl;
+                //std::cout << "CHONNNNNNNNNNN" << std::endl;
                 itemTurbo.setPosition(sf::Vector2f(-500, -500));
                 effect = 3;
                 speedBackground = -5.0;
@@ -261,19 +319,29 @@ int main()
                     speedBackground = -1.5;
                 }
             }
+            /////////////////////////////////////////////// meteor /////////////////////////////////////////////////////////////
+            for (int i = 0; i < 3; i++) {
+                if (meteorlist[i].checkColilistion(player.getPosition(), player.getHalfSize())) {
+                    meteorlist[i].setPosition(sf::Vector2f(-500, -500));
+                }
+            }
+            /*for (int i = 0; i < 3; i++) {
+                if(meteorlist[i].checkColilistion(bulletList[i].getPosition(), bulletList.getHalfSize())) {
+                    meteorlist[i].setPosition(sf::Vector2f(-500, -500));
 
+            }*/
             ///////////////////////////////////// Draw /////////////////////////////////////////////////////////////
             window.clear(sf::Color(240, 185, 246));
             window.draw(background[0]);
             bulletList.Draw(window);
-            player.Draw(window);
-            itemGreen.Draw(window);
-            itemPink.Draw(window);
-            itemTurbo.Draw(window);
+            player.Draw(window, deltaTime);
+           // itemGreen.Draw(window);
+            itemPink.Draw(window, deltaTime);
+            itemTurbo.Draw(window, deltaTime);
             for (Meteor& meteorlist : meteorlist)
-                meteorlist.Draw(window);
+                meteorlist.Draw(window, deltaTime);
             window.display();
-        //}
+        }
     }
     return 0;
 }

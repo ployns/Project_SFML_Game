@@ -13,20 +13,24 @@ Meteor::~Meteor()
 {
 }
 
-void Meteor::Draw(sf::RenderWindow& window)
+void Meteor::Draw(sf::RenderWindow& window, float _deltatime)
 {
-	deltaTime = clock.restart().asSeconds();
+	//std::cout << "Do" << std::endl;
+	//deltaTime = clock.restart().asSeconds();
+	//std::cout << deltaTime;
+	//std::cout << this->body.getPosition().x << " " << this->body.getPosition().y << std::endl;
 	if (this->body.getPosition().x > -500) {
+		//std::cout << "Do" << std::endl;
 		window.draw(body);
-		this->Update(deltaTime);
-		this->move(deltaTime);
+		this->Update(_deltatime);
+		this->move(_deltatime);
 	}
 }
 
 bool Meteor::checkColilistion(sf::Vector2f posPlayer, sf::Vector2f halfSizePlayer)
 {
-	return (abs(posPlayer.x - this->body.getPosition().x) < (halfSizePlayer.x * 0.8 + this->getHalfSize().x * 0.6) &&
-		abs(posPlayer.y - this->body.getPosition().y) < (halfSizePlayer.y * 0.8 + this->getHalfSize().y * 0.6));
+	return (abs(posPlayer.x - this->body.getPosition().x) < (halfSizePlayer.x * 0.5 + this->getHalfSize().x * 0.5) &&
+		abs(posPlayer.y - this->body.getPosition().y) < (halfSizePlayer.y * 0.6 + this->getHalfSize().y * 0.6));
 }
 
 void Meteor::setPosition(sf::Vector2f pos)
