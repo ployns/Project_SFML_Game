@@ -40,13 +40,20 @@ void Meteor::setPosition(sf::Vector2f pos)
 
 sf::Vector2f Meteor::getPosition()
 {
-	return sf::Vector2f(this->body.getPosition());
+	return (this->body.getPosition());
 }
 
 void Meteor::Update(float deltaTime)
 {
 	Animation.Update(0, deltaTime);
 	this->body.setTextureRect(Animation.uvRect);
+}
+
+void Meteor::reset(float pos)
+{
+	if (this->body.getPosition().x <= pos) {
+		this->body.setPosition(sf::Vector2f(rand() % 1000 + 250, -200));
+	}
 }
 
 void Meteor::move(float deltaTime)

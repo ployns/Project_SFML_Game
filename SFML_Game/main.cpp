@@ -12,6 +12,13 @@
 
 int main()
 {
+    sf::Font font;
+    if (font.loadFromFile("font/Winter Bells.ttf"))
+    {
+        printf("ppppppppppppppppp");
+    }
+    ////////////////////////
+
     int game = 0;
     float speed = 1000;
     float y = 0;
@@ -82,9 +89,14 @@ int main()
     Item itemTurbo(&itemTurboTexture, sf::Vector2f(8000.0f, 100.0f));
 
     std::vector<Meteor> meteorlist;
-    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1200.0f, -800.0f)));
-    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1600.0f, -1000.0f)));
-    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(1800.0f, -1400.0f)));
+    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1400)));
+    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1200)));
+    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1300)));
+    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1400)));
+    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1200)));
+    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1300)));
+
+
 
     Menu menu(&menuTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
     Menu play(&playTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(80.0f, 120.0f));
@@ -319,17 +331,15 @@ int main()
                     speedBackground = -1.5;
                 }
             }
-            /////////////////////////////////////////////// meteor /////////////////////////////////////////////////////////////
-            for (int i = 0; i < 3; i++) {
+            /////////////////////////////////////////////// meteor checkchon /////////////////////////////////////////////////////////////
+            for (int i = 0; i < 6; i++) {
                 if (meteorlist[i].checkColilistion(player.getPosition(), player.getHalfSize())) {
                     meteorlist[i].setPosition(sf::Vector2f(-500, -500));
                 }
+                meteorlist[i].reset(-500.0f);
+                
             }
-            /*for (int i = 0; i < 3; i++) {
-                if(meteorlist[i].checkColilistion(bulletList[i].getPosition(), bulletList.getHalfSize())) {
-                    meteorlist[i].setPosition(sf::Vector2f(-500, -500));
 
-            }*/
             ///////////////////////////////////// Draw /////////////////////////////////////////////////////////////
             window.clear(sf::Color(240, 185, 246));
             window.draw(background[0]);

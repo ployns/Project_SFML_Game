@@ -8,7 +8,8 @@ public:
 	Bullet(sf::Texture* texture, int *effect);
 	~Bullet();
 	void Draw(sf::RenderWindow& window);
-
+	sf::Vector2f getPosition();
+	sf::Vector2f getHalfSize();
 	sf::Vector2f positionPlayer;
 	sf::Event* evnt;
 	bool canAttack();

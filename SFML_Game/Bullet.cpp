@@ -38,6 +38,22 @@ void Bullet::Draw(sf::RenderWindow& window)
     }
 }
 
+sf::Vector2f Bullet::getPosition()
+{
+    for (int i = 0; i < fire_num; i++) {
+        return this->fires[i].getPosition();
+    }
+    
+}
+
+//sf::Vector2f Bullet::getHalfSize()
+//{
+//    for (int i = 0; i < fire_num; i++) {
+//        sf::Vector2u size = this->fires[i].getTexture()->getSize(); 
+//        return sf::Vector2f(size.x / 3 / 2, size.y / 1 / 2);
+//    }
+//}
+
 bool Bullet::canAttack()
 {
     for (int i = 0; i < fire_num; i++)

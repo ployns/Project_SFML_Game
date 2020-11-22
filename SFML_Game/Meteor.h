@@ -12,6 +12,7 @@ public:
 	void setPosition(sf::Vector2f pos);
 	sf::Vector2f getPosition();
 	void Update(float deltaTime);
+	void reset(float pos);
 	std::vector<Meteor> meteorlist;
 
 private:
