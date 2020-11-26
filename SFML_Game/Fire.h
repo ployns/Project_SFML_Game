@@ -17,6 +17,7 @@ public:
 	sf::Vector2f getPosition();
 	void setY(double y);
 	void setScale(sf::Vector2f scale);
+	sf::Vector2f getHalfSize();
 
 	//test
 	double getDeltaDistance();
@@ -26,8 +27,8 @@ private:
 	void move(float deltaTime);
 	bool active = false;
 	Animation Animation;
-	sf::Sprite body;
 	sf::RectangleShape shape;
+	sf::Sprite body;
 	
 
 	//test

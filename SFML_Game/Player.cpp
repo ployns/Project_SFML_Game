@@ -4,6 +4,7 @@ Player::Player(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, 
 	Animation(texture, imageCount, switchTime)
 {
 	this->body.setSize(sf::Vector2f(216.0f, 180.0f));
+    //this->body.setSize(sf::Vector2f(180.0f, 80.0f));
 	this->body.setPosition(position);
 	this->body.setTexture(texture);
 }
@@ -28,12 +29,19 @@ sf::Vector2f Player::getPosition()
 
 void Player::actionAttack()
 {
-    this->state = 3;
+    if (state != 4) {
+        this->state = 3;
+    }
 }
 
 void Player::actionTurbo()
 {
     this->state = 1;
+}
+
+void Player::actionHurt()
+{
+    this->state = 4;
 }
 
 

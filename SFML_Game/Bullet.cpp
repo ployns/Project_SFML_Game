@@ -46,13 +46,13 @@ sf::Vector2f Bullet::getPosition()
     
 }
 
-//sf::Vector2f Bullet::getHalfSize()
-//{
-//    for (int i = 0; i < fire_num; i++) {
-//        sf::Vector2u size = this->fires[i].getTexture()->getSize(); 
-//        return sf::Vector2f(size.x / 3 / 2, size.y / 1 / 2);
-//    }
-//}
+
+sf::Vector2f Bullet::getHalfSize()
+{
+    for (int i = 0; i < fire_num; i++) {
+        return this->fires[i].getHalfSize();
+    }
+}
 
 bool Bullet::canAttack()
 {
@@ -85,17 +85,6 @@ void Bullet::action()
                 case 0:
                     fires[i].setPosition(this->positionPlayer);
                     this->fires[i].setActive(true);
-                    break;
-                case 1:
-                    fires[i].setEffect(*this->effect);
-                    fires[i + 1].setEffect(*this->effect);
-                    fires[i + 2].setEffect(*this->effect);
-                    fires[i].setPosition(sf::Vector2f(this->positionPlayer.x, this->positionPlayer.y));
-                    fires[i + 1].setPosition(sf::Vector2f(this->positionPlayer.x, this->positionPlayer.y));
-                    fires[i + 2].setPosition(sf::Vector2f(this->positionPlayer.x, this->positionPlayer.y));
-                    this->fires[i].setActive(true);
-                    this->fires[i + 1].setActive(true);
-                    this->fires[i + 2].setActive(true);
                     break;
                 case 2:
                     fires[i].setPosition(sf::Vector2f(this->positionPlayer.x, this->positionPlayer.y-50));

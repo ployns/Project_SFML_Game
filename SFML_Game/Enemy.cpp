@@ -1,6 +1,9 @@
-#include "Meteor.h"
+#include "Enemy.h"
 
-Meteor::Meteor(sf::Texture* texture, sf::Vector2u imageCount, float switchTime ,sf::Vector2f position) :
+///////////////////////////////////// copy meteor ////////////////////////////////////////////////////
+
+
+Enemy::Enemy(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f position) :
 	Animation(texture, imageCount, switchTime)
 {
 	this->body.setScale(sf::Vector2f(1.5, 1.5));
@@ -9,11 +12,11 @@ Meteor::Meteor(sf::Texture* texture, sf::Vector2u imageCount, float switchTime ,
 	//this->Update(deltaTime);
 }
 
-Meteor::~Meteor()
+Enemy::~Enemy()
 {
 }
 
-void Meteor::Draw(sf::RenderWindow& window, float _deltatime)
+void Enemy::Draw(sf::RenderWindow& window, float _deltatime)
 {
 	//std::cout << "Do" << std::endl;
 	//deltaTime = clock.restart().asSeconds();
@@ -27,41 +30,41 @@ void Meteor::Draw(sf::RenderWindow& window, float _deltatime)
 	}
 }
 
-bool Meteor::checkColilistion(sf::Vector2f posPlayer, sf::Vector2f halfSizePlayer)
+bool Enemy::checkColilistion(sf::Vector2f posPlayer, sf::Vector2f halfSizePlayer)
 {
 	return (abs(posPlayer.x - this->body.getPosition().x) < (halfSizePlayer.x * 0.5 + this->getHalfSize().x * 0.5) &&
-		abs(posPlayer.y - this->body.getPosition().y) < (halfSizePlayer.y * 0.6 + this->getHalfSize().y * 0.6));
+		abs(posPlayer.y - this->body.getPosition().y) < (halfSizePlayer.y * 0.5 + this->getHalfSize().y * 0.5));
 }
 
-void Meteor::setPosition(sf::Vector2f pos)
+void Enemy::setPosition(sf::Vector2f pos)
 {
 	this->body.setPosition(pos);
 }
 
-sf::Vector2f Meteor::getPosition()
+sf::Vector2f Enemy::getPosition()
 {
 	return (this->body.getPosition());
 }
 
-void Meteor::Update(float deltaTime)
+void Enemy::Update(float deltaTime)
 {
 	Animation.Update(0, deltaTime);
 	this->body.setTextureRect(Animation.uvRect);
 }
 
-void Meteor::reset(float pos)
+void Enemy::reset(float pos)
 {
 	if (this->body.getPosition().x <= pos) {
-		this->body.setPosition(sf::Vector2f(rand() % 1000 + 250, -(rand() % 200 + 150)));
+		this->body.setPosition(sf::Vector2f(rand() % 1600 + 1200, rand() % 680 + 20));
 	}
 }
 
-void Meteor::move(float deltaTime)
+void Enemy::move(float deltaTime)
 {
-	this->body.move(sf::Vector2f(deltaTime * -300, deltaTime * 300));
+	this->body.move(sf::Vector2f(deltaTime * -300, deltaTime * 0));
 }
 
-sf::Vector2f Meteor::getHalfSize()
+sf::Vector2f Enemy::getHalfSize()
 {
 	sf::Vector2u size = this->body.getTexture()->getSize();
 	return sf::Vector2f(size.x / 2, size.y / 2);

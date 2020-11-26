@@ -11,6 +11,7 @@ public:
 	sf::Vector2f getPosition();
 	void actionAttack();
 	void actionTurbo();
+	void actionHurt();
 	sf::Vector2f getHalfSize();
 
 private:

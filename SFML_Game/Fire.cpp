@@ -60,6 +60,12 @@ void Fire::setScale(sf::Vector2f scale)
 	body.setScale(scale);
 }
 
+sf::Vector2f Fire::getHalfSize()
+{
+	sf::Vector2u size = this->body.getTexture()->getSize();
+	return sf::Vector2f(size.x / 4 / 2, size.y / 6 / 2);
+}
+
 double Fire::getDeltaDistance()
 {
 	return this->body.getPosition().x - this->startPosition;

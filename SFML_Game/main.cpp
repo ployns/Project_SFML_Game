@@ -9,6 +9,11 @@
 #include "Item.h"
 #include "Meteor.h"
 #include "Menu.h"
+#include "Enemy.h"
+
+
+///////// ต้องแก้บัค ยิง enemy บางตัวแล้วไม่หายไป //////////
+
 
 int main()
 {
@@ -31,17 +36,18 @@ int main()
     sf::Texture playerTexture; //sprite dragon
     playerTexture.loadFromFile("dragon/dragon_total.png"); 
 
+    sf::Texture enemyTexture;
+    enemyTexture.loadFromFile("dragon/enemybat.png");
+
     sf::Texture fireTexture; //sprite fire
     fireTexture.loadFromFile("dragon/dragon_total.png");
 
     sf::Texture meteorTexture; //sprite meteor
     meteorTexture.loadFromFile("dragon/meteor.png");
 
-    //sf::Texture itemGreenTexture; // sprite green item
-    //itemGreenTexture.loadFromFile("item/green.png");
     sf::Texture itemPinkTexture; // sprite pink item
     itemPinkTexture.loadFromFile("item/pink.png");
-    sf::Texture itemTurboTexture; // sprite pink item
+    sf::Texture itemTurboTexture; // sprite turbo item
     itemTurboTexture.loadFromFile("item/turbo.png");
 
     sf::Texture menuTexture; // menu
@@ -82,9 +88,7 @@ int main()
     ////////////////////////////////////////////////   SET   ////////////////////////////////////////////////////
 
     Player player(&playerTexture, sf::Vector2u(4, 6), 0.3f, sf::Vector2f(0.0f, 310.0f));
-    //Animation animation(&playerTexture, sf::Vector2u(4, 6), 0.3f); //ตัดช่องของมังกร
 
-    //Item itemGreen(&itemGreenTexture, sf::Vector2f(2000.0f, 200.0f));
     Item itemPink(&itemPinkTexture, sf::Vector2f(5000.0f, 400.0f));
     Item itemTurbo(&itemTurboTexture, sf::Vector2f(8000.0f, 100.0f));
 
@@ -93,9 +97,14 @@ int main()
     meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1200)));
     meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1300)));
     meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1400)));
-    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1200)));
-    meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1300)));
+    //meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1200)));
+    //meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1300)));
 
+    std::vector<Enemy> enemylist;
+    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(rand() % 1600 + 1200, rand() % 680 + 20)));
+    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(rand() % 1600 + 1200, rand() % 680 + 20)));
+    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(rand() % 1600 + 1200, rand() % 680 + 20)));
+    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(rand() % 1600 + 1200, rand() % 680 + 20)));
 
 
     Menu menu(&menuTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
@@ -123,15 +132,6 @@ int main()
 
     while (window.isOpen())
     {
-        /*while (window.pollEvent(event))
-        {
-            switch (event.type)
-            {
-            case sf::Event::Closed:
-                window.close();
-                break;
-            }
-        }*/
 
         /////////////////////////////////////////////////////// menu /////////////////////////////////////////////////////////////
         while (game == 0) { 
@@ -253,7 +253,7 @@ int main()
             {
                 std::cout << "set isSpacebarPrees: true" << std::endl;
                 isSpacebarPrees = true;
-                if (bulletList.canAttack()) {
+                if (bulletList.canAttack() && effect!=3) { /////////////////////// ตอนเจ็บต้องยิงไม่ได้ ////////////////////
                     player.actionAttack();
                     shoot_sound.play();
                 }
@@ -287,34 +287,23 @@ int main()
             }
             ////////////////////////////////// item ////////////////////////////////////////////////////////////////////
 
-            //if (itemGreen.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemGreen
-            //    //std::cout << "CHONNNNNNNNNNN" << std::endl;
-            //    itemGreen.setPosition(sf::Vector2f(-500, -500));
-            //    effect = 1;
-            //    timeEffect = 10;
-            //}
             if (itemPink.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemPink
                 //std::cout << "CHONNNNNNNNNNN" << std::endl;
                 itemPink.setPosition(sf::Vector2f(-500, -500));
                 effect = 2;
                 timeEffect = 10;
+
             }
             if (itemTurbo.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemTurbo => 5/11/2020 6.06 PM
                 //std::cout << "CHONNNNNNNNNNN" << std::endl;
                 itemTurbo.setPosition(sf::Vector2f(-500, -500));
+
                 effect = 3;
                 speedBackground = -5.0;
                 timeEffect = 5;
             }
 
             //////////////////////////////////////// Item Time up ///////////////////////////////////////////////////////////
-            if (effect == 1 && timeEffect > 0) {
-                timeEffect -= deltaTime;
-                //std::cout << timeEffect << std::endl;
-                if (timeEffect < 0) {
-                    effect = 0;
-                }
-            }
             if (effect == 2 && timeEffect > 0) {
                 timeEffect -= deltaTime;
 
@@ -332,12 +321,18 @@ int main()
                 }
             }
             /////////////////////////////////////////////// meteor checkchon /////////////////////////////////////////////////////////////
-            for (int i = 0; i < 6; i++) {
-                if (meteorlist[i].checkColilistion(player.getPosition(), player.getHalfSize())) {
+            for (int i = 0; i < 4; i++) {
+                if (meteorlist[i].checkColilistion(player.getPosition(), player.getHalfSize())&& effect!=3) {
                     meteorlist[i].setPosition(sf::Vector2f(-500, -500));
+                    player.actionHurt();
                 }
                 meteorlist[i].reset(-500.0f);
-                
+            }
+            for (int i = 0; i < 4; i++) {
+                if (enemylist[i].checkColilistion(bulletList.getPosition(), bulletList.getHalfSize())) {
+                    enemylist[i].setPosition(sf::Vector2f(-500, -500));
+                }
+                enemylist[i].reset(-200.0f);
             }
 
             ///////////////////////////////////// Draw /////////////////////////////////////////////////////////////
@@ -345,11 +340,12 @@ int main()
             window.draw(background[0]);
             bulletList.Draw(window);
             player.Draw(window, deltaTime);
-           // itemGreen.Draw(window);
             itemPink.Draw(window, deltaTime);
             itemTurbo.Draw(window, deltaTime);
             for (Meteor& meteorlist : meteorlist)
                 meteorlist.Draw(window, deltaTime);
+            for (Enemy& enemylist : enemylist)
+                enemylist.Draw(window, deltaTime);
             window.display();
         }
     }
