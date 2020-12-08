@@ -17,17 +17,14 @@
 
 int main()
 {
-    sf::Font font;
-    if (font.loadFromFile("font/Winter Bells.ttf"))
-    {
-        printf("ppppppppppppppppp");
-    }
-    ////////////////////////
+    
 
     int game = 0;
+    int HP = 10;
     float speed = 1000;
     float y = 0;
     int shoot=false;
+    int sc = 0;
     sf::RenderWindow window(sf::VideoMode(1080, 720), "SFML Tutorial", sf::Style::Close | sf::Style::Resize);//ขนาดจอ
     window.setFramerateLimit(120);
     
@@ -66,6 +63,24 @@ int main()
     highscorebgTexture.loadFromFile("menu/highscorebg.png");
     sf::Texture backTexture;
     backTexture.loadFromFile("menu/back.png");
+    sf::Texture bggameoverTexture;
+    bggameoverTexture.loadFromFile("menu/bggameover.png");
+
+
+    /////////////////////////////////////////////////////////////////////////
+
+    sf::Font scorefont;
+    scorefont.loadFromFile("font/Peach Plum.ttf");
+    sf::Text score;
+    std::string scoreString;
+    score.setFont(scorefont);
+    score.setCharacterSize(50);
+    score.setFillColor(sf::Color::Black);
+    score.setPosition(10.0f, 10.0f);
+    scoreString = " SCORE : " + std::to_string(sc);
+    score.setString(scoreString);
+
+    ////////////////////////
 
     float speedBackground = -1.5;
     sf::Texture BackgroundTexture[2]; //background
@@ -115,7 +130,7 @@ int main()
     Menu howtoplay(&howtoplayTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
     Menu hightscorebg(&highscorebgTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
     Menu back(&backTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(20.0f, 10.0f));
-
+    Menu bggameover(&bggameoverTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
     
     int effect = 0;
     double timeEffect = 0;
@@ -123,15 +138,16 @@ int main()
 
     float deltaTime = 0.0f;
     sf::Clock clock;
-    start_sound.play();
     sf::Event event;
     bulletList.evnt = &event;
     bool isSpacebarPrees = false;
+    start_sound.play();
 
     /////////////////////////////////////// Start ///////////////////////////////////////////////////////////////////
 
     while (window.isOpen())
     {
+        
 
         /////////////////////////////////////////////////////// menu /////////////////////////////////////////////////////////////
         while (game == 0) { 
@@ -229,12 +245,21 @@ int main()
         while (game == 4) {
             window.close();
         }
+        while (game == 5) {
+            bggameover.Draw(window);
+            window.display();
+        }
 
         ////////////////////////////////////////////////////////////// in Game ////////////////////////////////////////////////////////////////
         deltaTime = clock.restart().asSeconds();
         //std::cout << deltaTime;
         //return 0;
         while (game == 1) {
+            std::cout << HP << std::endl;
+            
+            sf::RectangleShape playerHP(sf::Vector2f(HP * 40, 20));
+            playerHP.setFillColor(sf::Color::Red);
+            playerHP.setPosition(650, 20);
             //std::cout << "ppppppppppppppppppppppppppppppppppppppppp" << std::endl;
             bulletList.positionPlayer = player.getPosition();
             deltaTime = clock.restart().asSeconds();
@@ -322,18 +347,37 @@ int main()
             }
             /////////////////////////////////////////////// meteor checkchon /////////////////////////////////////////////////////////////
             for (int i = 0; i < 4; i++) {
-                if (meteorlist[i].checkColilistion(player.getPosition(), player.getHalfSize())&& effect!=3) {
+                if ((meteorlist[i].checkColilistion(player.getPosition(), player.getHalfSize())&& effect!=3)) {
                     meteorlist[i].setPosition(sf::Vector2f(-500, -500));
                     player.actionHurt();
+                    HP--;
+                    if (HP <= 0) {
+                        game = 5;
+                    }
                 }
                 meteorlist[i].reset(-500.0f);
             }
+
+            //////////////////////////////////////////////////////////////////////////////////// บัคคคคคคคคคคคคคคคคคคค
+            /*for (int i = 0; i < 4; i++) {
+                if ((enemylist[i].checkColilistion(player.getPosition(), player.getHalfSize()) && effect != 3)) {
+                    player.actionHurt();
+                    HP--;
+                }
+            }*/
+            
             for (int i = 0; i < 4; i++) {
                 if (enemylist[i].checkColilistion(bulletList.getPosition(), bulletList.getHalfSize())) {
                     enemylist[i].setPosition(sf::Vector2f(-500, -500));
                 }
                 enemylist[i].reset(-200.0f);
+                sc ++;
+                std::cout << sc << std::endl;
+                
             }
+            
+
+            
 
             ///////////////////////////////////// Draw /////////////////////////////////////////////////////////////
             window.clear(sf::Color(240, 185, 246));
@@ -346,8 +390,11 @@ int main()
                 meteorlist.Draw(window, deltaTime);
             for (Enemy& enemylist : enemylist)
                 enemylist.Draw(window, deltaTime);
+            window.draw(playerHP);
+            window.draw(score);
             window.display();
         }
+
     }
     return 0;
 }
