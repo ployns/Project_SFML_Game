@@ -55,7 +55,7 @@ void Enemy::Update(float deltaTime)
 void Enemy::reset(float pos)
 {
 	if (this->body.getPosition().x <= pos) {
-		this->body.setPosition(sf::Vector2f(rand() % 1600 + 1200, rand() % 680 + 20));
+		this->body.setPosition(sf::Vector2f(1100, rand() % 680 + 20));
 	}
 }
 

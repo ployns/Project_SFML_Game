@@ -13,12 +13,10 @@
 
 
 ///////// ต้องแก้บัค ยิง enemy บางตัวแล้วไม่หายไป //////////
-
+///////// บางครั้งโดน enemy แล้ว score ขึ้น //////////////
 
 int main()
 {
-    
-
     int game = 0;
     int HP = 10;
     float speed = 1000;
@@ -46,6 +44,8 @@ int main()
     itemPinkTexture.loadFromFile("item/pink.png");
     sf::Texture itemTurboTexture; // sprite turbo item
     itemTurboTexture.loadFromFile("item/turbo.png");
+    sf::Texture itemHeartTexture;
+    itemHeartTexture.loadFromFile("item/heart.png");
 
     sf::Texture menuTexture; // menu
     menuTexture.loadFromFile("menu/game.png");
@@ -65,20 +65,23 @@ int main()
     backTexture.loadFromFile("menu/back.png");
     sf::Texture bggameoverTexture;
     bggameoverTexture.loadFromFile("menu/bggameover.png");
+    sf::Texture homeTexture;
+    homeTexture.loadFromFile("menu/home.png");
 
 
     /////////////////////////////////////////////////////////////////////////
 
     sf::Font scorefont;
     scorefont.loadFromFile("font/Peach Plum.ttf");
+
     sf::Text score;
     std::string scoreString;
     score.setFont(scorefont);
     score.setCharacterSize(50);
     score.setFillColor(sf::Color::Black);
+    score.setOutlineColor(sf::Color::White);
     score.setPosition(10.0f, 10.0f);
-    scoreString = " SCORE : " + std::to_string(sc);
-    score.setString(scoreString);
+
 
     ////////////////////////
 
@@ -104,8 +107,9 @@ int main()
 
     Player player(&playerTexture, sf::Vector2u(4, 6), 0.3f, sf::Vector2f(0.0f, 310.0f));
 
-    Item itemPink(&itemPinkTexture, sf::Vector2f(5000.0f, 400.0f));
-    Item itemTurbo(&itemTurboTexture, sf::Vector2f(8000.0f, 100.0f));
+    Item itemPink(&itemPinkTexture, sf::Vector2f(rand() % 8000 + 4000, rand() % 550 + 100));
+    Item itemTurbo(&itemTurboTexture, sf::Vector2f(rand() % 8000, rand() % 550 + 100));
+    Item itemHeart(&itemHeartTexture, sf::Vector2f(rand() % 8000, rand() % 550 + 100));
 
     std::vector<Meteor> meteorlist;
     meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1400)));
@@ -131,6 +135,10 @@ int main()
     Menu hightscorebg(&highscorebgTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
     Menu back(&backTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(20.0f, 10.0f));
     Menu bggameover(&bggameoverTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
+    Menu home(&homeTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(900.0f, 580.0f));
+
+    Menu heart(&itemHeartTexture, sf::Vector2f(1, 1), sf::Vector2f(580.0f, 0.0f));
+
     
     int effect = 0;
     double timeEffect = 0;
@@ -247,7 +255,20 @@ int main()
         }
         while (game == 5) {
             bggameover.Draw(window);
+            home.Draw(window);
             window.display();
+            if (home.getGlobalBounds(window)) {
+                home.setScale(sf::Vector2f(0.8, 0.8));
+            }
+            else {
+                home.setScale(sf::Vector2f(0.6f, 0.6f));
+            }
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            {
+                if (home.getGlobalBounds(window)) {
+                    game = 0;
+                }
+            }
         }
 
         ////////////////////////////////////////////////////////////// in Game ////////////////////////////////////////////////////////////////
@@ -255,12 +276,16 @@ int main()
         //std::cout << deltaTime;
         //return 0;
         while (game == 1) {
-            std::cout << HP << std::endl;
+            //std::cout << HP << std::endl;
+            std::cout << sc << std::endl;
             
-            sf::RectangleShape playerHP(sf::Vector2f(HP * 40, 20));
+            sf::RectangleShape playerHP(sf::Vector2f(HP * 40, 30));
             playerHP.setFillColor(sf::Color::Red);
-            playerHP.setPosition(650, 20);
-            //std::cout << "ppppppppppppppppppppppppppppppppppppppppp" << std::endl;
+            playerHP.setPosition(650, 30);
+
+            scoreString = " SCORE : " + std::to_string(sc);
+            score.setString(scoreString);
+
             bulletList.positionPlayer = player.getPosition();
             deltaTime = clock.restart().asSeconds();
             while (window.pollEvent(event))
@@ -276,7 +301,7 @@ int main()
                 and event.text.unicode == ' '
                 and isSpacebarPrees == false)
             {
-                std::cout << "set isSpacebarPrees: true" << std::endl;
+                //std::cout << "set isSpacebarPrees: true" << std::endl;
                 isSpacebarPrees = true;
                 if (bulletList.canAttack() && effect!=3) { /////////////////////// ตอนเจ็บต้องยิงไม่ได้ ////////////////////
                     player.actionAttack();
@@ -286,11 +311,11 @@ int main()
             if (event.type == sf::Event::EventType::KeyReleased && isSpacebarPrees == true)
             {
                 isSpacebarPrees = false;
-                std::cout << "set isSpacebarPrees: false" << std::endl;
+                //std::cout << "set isSpacebarPrees: false" << std::endl;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             {
-                std::cout << "set isSpacebarPrees: false" << std::endl;
+                //std::cout << "set isSpacebarPrees: false" << std::endl;
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -317,8 +342,8 @@ int main()
                 itemPink.setPosition(sf::Vector2f(-500, -500));
                 effect = 2;
                 timeEffect = 10;
-
             }
+
             if (itemTurbo.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemTurbo => 5/11/2020 6.06 PM
                 //std::cout << "CHONNNNNNNNNNN" << std::endl;
                 itemTurbo.setPosition(sf::Vector2f(-500, -500));
@@ -326,6 +351,21 @@ int main()
                 effect = 3;
                 speedBackground = -5.0;
                 timeEffect = 5;
+            }
+
+            if (itemHeart.checkColilistion(player.getPosition(), player.getHalfSize())) { 
+                //std::cout << "CHONNNNNNNNNNN" << std::endl;
+                itemHeart.setPosition(sf::Vector2f(-500, -500));
+                effect = 4;
+                if (HP == 8) {
+                    HP = HP + 2;
+                }
+                if (HP == 9) {
+                    HP = HP + 1;
+                }
+                if (HP <= 7) {
+                    HP = HP + 3;
+                }
             }
 
             //////////////////////////////////////// Item Time up ///////////////////////////////////////////////////////////
@@ -359,22 +399,25 @@ int main()
             }
 
             //////////////////////////////////////////////////////////////////////////////////// บัคคคคคคคคคคคคคคคคคคค
-            /*for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++) {
                 if ((enemylist[i].checkColilistion(player.getPosition(), player.getHalfSize()) && effect != 3)) {
+                    enemylist[i].setPosition(sf::Vector2f(-500, -500));
                     player.actionHurt();
                     HP--;
                 }
-            }*/
+                enemylist[i].reset(-200.0f);
+            }
             
             for (int i = 0; i < 4; i++) {
                 if (enemylist[i].checkColilistion(bulletList.getPosition(), bulletList.getHalfSize())) {
                     enemylist[i].setPosition(sf::Vector2f(-500, -500));
+                    sc = sc + 50;
                 }
                 enemylist[i].reset(-200.0f);
-                sc ++;
-                std::cout << sc << std::endl;
                 
+
             }
+
             
 
             
@@ -386,12 +429,14 @@ int main()
             player.Draw(window, deltaTime);
             itemPink.Draw(window, deltaTime);
             itemTurbo.Draw(window, deltaTime);
+            itemHeart.Draw(window, deltaTime);
             for (Meteor& meteorlist : meteorlist)
                 meteorlist.Draw(window, deltaTime);
             for (Enemy& enemylist : enemylist)
                 enemylist.Draw(window, deltaTime);
             window.draw(playerHP);
             window.draw(score);
+            heart.Draw(window);
             window.display();
         }
 
