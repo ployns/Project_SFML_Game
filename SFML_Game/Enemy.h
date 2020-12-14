@@ -13,6 +13,8 @@ public:
 	sf::Vector2f getPosition();
 	void Update(float deltaTime);
 	void reset(float pos);
+	//void move(float deltaTime);
+
 	std::vector<Enemy> enemylist;
 
 private:

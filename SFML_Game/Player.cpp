@@ -66,18 +66,18 @@ void Player::controller()
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && this->getPosition().x > -100)
     {
-        this->body.move(-1.5f, 0.0f);
+        this->body.move(-1.6f, 0.0f);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && this->getPosition().x < 800)
     {
-        this->body.move(1.5f, 0.0f);
+        this->body.move(1.6f, 0.0f);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && this->getPosition().y > -30)
     {
-        this->body.move(0.0f, -1.5f);
+        this->body.move(0.0f, -1.6f);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && this->getPosition().y < 590)
     {
-        this->body.move(0.0f, 1.5f);
+        this->body.move(0.0f, 1.6f);
     }
 }

@@ -61,7 +61,7 @@ void Enemy::reset(float pos)
 
 void Enemy::move(float deltaTime)
 {
-	this->body.move(sf::Vector2f(deltaTime * -300, deltaTime * 0));
+	this->body.move(sf::Vector2f(deltaTime * -300, deltaTime * (200-rand()%350 ))); //////////////////////////////////////////// ?????????
 }
 
 sf::Vector2f Enemy::getHalfSize()

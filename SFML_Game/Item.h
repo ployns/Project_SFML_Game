@@ -12,6 +12,7 @@ public:
 	bool checkColilistion(sf::Vector2f posPlayer, sf::Vector2f halfSizePlayer);
 	void setPosition(sf::Vector2f pos);
 	sf::Vector2f getPosition();
+	void reset(float pos);
 	//sf::Vector2f positionPlayer();
 
 private:

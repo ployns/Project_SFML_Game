@@ -14,6 +14,7 @@ public:
 	sf::Event* evnt;
 	bool canAttack();
 
+
 private:
 	int* effect;
 	void action();

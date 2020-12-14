@@ -44,6 +44,13 @@ sf::Vector2f Item::getPosition()
 	return sf::Vector2f(this->body.getPosition());
 }
 
+void Item::reset(float pos)
+{
+	if (this->body.getPosition().x <= pos) {
+		this->body.setPosition(sf::Vector2f(rand() % 8000 + 4000, rand() % 550 + 100));
+	}
+}
+
 sf::Vector2f Item::getHalfSize()
 {
 	sf::Vector2u size = this->body.getTexture()->getSize();

@@ -13,7 +13,7 @@
 
 
 ///////// ต้องแก้บัค ยิง enemy บางตัวแล้วไม่หายไป //////////
-///////// บางครั้งโดน enemy แล้ว score ขึ้น //////////////
+///////// บางครั้งไม่โดน enemy แล้ว score ขึ้น //////////////
 
 int main()
 {
@@ -72,15 +72,25 @@ int main()
     /////////////////////////////////////////////////////////////////////////
 
     sf::Font scorefont;
-    scorefont.loadFromFile("font/Peach Plum.ttf");
+    scorefont.loadFromFile("font/joystix.monospace.ttf");
 
     sf::Text score;
     std::string scoreString;
     score.setFont(scorefont);
-    score.setCharacterSize(50);
+    score.setCharacterSize(40);
     score.setFillColor(sf::Color::Black);
     score.setOutlineColor(sf::Color::White);
     score.setPosition(10.0f, 10.0f);
+
+    sf::Font namefont;
+    namefont.loadFromFile("font/Peach Plum.ttf");
+
+    sf::Text name;
+    std::string nameString;
+    name.setFont(namefont);
+    name.setCharacterSize(30);
+    name.setFillColor(sf::Color::Black);
+    name.setPosition(10.0f, 670.0f);
 
 
     ////////////////////////
@@ -107,9 +117,9 @@ int main()
 
     Player player(&playerTexture, sf::Vector2u(4, 6), 0.3f, sf::Vector2f(0.0f, 310.0f));
 
-    Item itemPink(&itemPinkTexture, sf::Vector2f(rand() % 8000 + 4000, rand() % 550 + 100));
-    Item itemTurbo(&itemTurboTexture, sf::Vector2f(rand() % 8000, rand() % 550 + 100));
-    Item itemHeart(&itemHeartTexture, sf::Vector2f(rand() % 8000, rand() % 550 + 100));
+    Item itemPink(&itemPinkTexture, sf::Vector2f(rand() % 6000 + 2000, rand() % 500 + 100));
+    Item itemTurbo(&itemTurboTexture, sf::Vector2f(rand() % 6000 + 2500, rand() % 500 + 100));
+    Item itemHeart(&itemHeartTexture, sf::Vector2f(rand() % 6000 + 3000, rand() % 500 + 100));
 
     std::vector<Meteor> meteorlist;
     meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1400)));
@@ -120,10 +130,10 @@ int main()
     //meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1300)));
 
     std::vector<Enemy> enemylist;
-    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(rand() % 1600 + 1200, rand() % 680 + 20)));
-    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(rand() % 1600 + 1200, rand() % 680 + 20)));
-    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(rand() % 1600 + 1200, rand() % 680 + 20)));
-    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(rand() % 1600 + 1200, rand() % 680 + 20)));
+    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1200, rand() % 680 + 20)));
+    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1300, rand() % 680 + 20)));
+    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1400, rand() % 680 + 20)));
+    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1500, rand() % 680 + 20)));
 
 
     Menu menu(&menuTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
@@ -168,11 +178,14 @@ int main()
                     break;
                 }
             }
+            nameString = " Napasorn 63010492";
+            name.setString(nameString);
             menu.Draw(window);
             play.Draw(window);
             howto.Draw(window);
             highscore.Draw(window);
             exit.Draw(window);
+            window.draw(name);
             window.display();
             if (play.getGlobalBounds(window)) {
                 play.setScale(sf::Vector2f(0.7f,0.7f));
@@ -212,9 +225,6 @@ int main()
                 else if (exit.getGlobalBounds(window)) {
                     game = 4;
                 }
-                /*else if (play.getGlobalBounds(window)) {
-                    game = 0;
-                }*/
             }
         }
 
@@ -278,12 +288,13 @@ int main()
         while (game == 1) {
             //std::cout << HP << std::endl;
             std::cout << sc << std::endl;
-            
+            //std::cout << deltaTime << std::endl;
+            sc++;
             sf::RectangleShape playerHP(sf::Vector2f(HP * 40, 30));
             playerHP.setFillColor(sf::Color::Red);
             playerHP.setPosition(650, 30);
 
-            scoreString = " SCORE : " + std::to_string(sc);
+            scoreString = " SCORE : " + std::to_string(sc/10);
             score.setString(scoreString);
 
             bulletList.positionPlayer = player.getPosition();
@@ -342,21 +353,23 @@ int main()
                 itemPink.setPosition(sf::Vector2f(-500, -500));
                 effect = 2;
                 timeEffect = 10;
+                itemPink.reset(-200);
             }
 
             if (itemTurbo.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemTurbo => 5/11/2020 6.06 PM
                 //std::cout << "CHONNNNNNNNNNN" << std::endl;
                 itemTurbo.setPosition(sf::Vector2f(-500, -500));
-
                 effect = 3;
                 speedBackground = -5.0;
                 timeEffect = 5;
+                itemTurbo.reset(-200);
+
             }
 
             if (itemHeart.checkColilistion(player.getPosition(), player.getHalfSize())) { 
                 //std::cout << "CHONNNNNNNNNNN" << std::endl;
                 itemHeart.setPosition(sf::Vector2f(-500, -500));
-                effect = 4;
+                itemHeart.reset(-200);
                 if (HP == 8) {
                     HP = HP + 2;
                 }
@@ -409,16 +422,14 @@ int main()
             }
             
             for (int i = 0; i < 4; i++) {
-                if (enemylist[i].checkColilistion(bulletList.getPosition(), bulletList.getHalfSize())) {
+                if (enemylist[i].checkColilistion(bulletList.getPosition(), bulletList.getHalfSize())&&enemylist[i].getPosition().x <= 1080) {
                     enemylist[i].setPosition(sf::Vector2f(-500, -500));
-                    sc = sc + 50;
+                    sc = sc + 500;
                 }
                 enemylist[i].reset(-200.0f);
                 
 
             }
-
-            
 
             
 
