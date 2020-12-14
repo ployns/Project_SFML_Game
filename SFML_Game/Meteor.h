@@ -14,9 +14,10 @@ public:
 	void Update(float deltaTime);
 	void reset(float pos);
 	std::vector<Meteor> meteorlist;
+	void move(float deltaTime);
 
 private:
-	void move(float deltaTime);
+	//void move(float deltaTime);
 	float deltaTime = 0.0f;
 	sf::Clock clock;
 	Animation Animation;

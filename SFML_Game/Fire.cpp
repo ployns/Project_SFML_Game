@@ -18,7 +18,7 @@ void Fire::Update(float deltaTime)
 {
 	//std::cout << deltaTime << std::endl;
 	this->move(deltaTime);
-	Animation.Update(5, deltaTime);
+	Animation.Update(0, deltaTime);
 	this->body.setTextureRect(Animation.uvRect);
 }
 
@@ -63,7 +63,7 @@ void Fire::setScale(sf::Vector2f scale)
 sf::Vector2f Fire::getHalfSize()
 {
 	sf::Vector2u size = this->body.getTexture()->getSize();
-	return sf::Vector2f(size.x / 4 / 2, size.y / 6 / 2);
+	return sf::Vector2f(size.x /4/ 2, size.y / 2);
 }
 
 double Fire::getDeltaDistance()
@@ -90,7 +90,7 @@ int Fire::getEffect()
 void Fire::move(float deltaTime)
 {
 	
-	if (this->body.getPosition().x > 900) 
+	if (this->body.getPosition().x > 1000) 
 	{
 		this->setActive(false);
 	}

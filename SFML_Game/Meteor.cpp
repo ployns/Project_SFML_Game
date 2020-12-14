@@ -29,8 +29,8 @@ void Meteor::Draw(sf::RenderWindow& window, float _deltatime)
 
 bool Meteor::checkColilistion(sf::Vector2f posPlayer, sf::Vector2f halfSizePlayer)
 {
-	return (abs(posPlayer.x - this->body.getPosition().x) < (halfSizePlayer.x * 0.5 + this->getHalfSize().x * 0.5) &&
-		abs(posPlayer.y - this->body.getPosition().y) < (halfSizePlayer.y * 0.6 + this->getHalfSize().y * 0.6));
+	return (abs(posPlayer.x - this->body.getPosition().x) < (halfSizePlayer.x * 0.3 + this->getHalfSize().x * 0.3) &&
+		abs(posPlayer.y - this->body.getPosition().y) < (halfSizePlayer.y * 0.3 + this->getHalfSize().y * 0.3));
 }
 
 void Meteor::setPosition(sf::Vector2f pos)

@@ -9,6 +9,7 @@ Enemy::Enemy(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf
 	this->body.setScale(sf::Vector2f(1.5, 1.5));
 	this->body.setPosition(position);
 	this->body.setTexture(*texture);
+
 	//this->Update(deltaTime);
 }
 
@@ -55,17 +56,17 @@ void Enemy::Update(float deltaTime)
 void Enemy::reset(float pos)
 {
 	if (this->body.getPosition().x <= pos) {
-		this->body.setPosition(sf::Vector2f(1100, rand() % 680 + 20));
+		this->body.setPosition(sf::Vector2f(1200, rand() % 640 + 20));
 	}
 }
 
 void Enemy::move(float deltaTime)
 {
-	this->body.move(sf::Vector2f(deltaTime * -300, deltaTime * (200-rand()%350 ))); //////////////////////////////////////////// ?????????
+	this->body.move(sf::Vector2f(deltaTime * -250, deltaTime * 0)); //////////////////////(200-rand()%350 )/////////////////
 }
 
 sf::Vector2f Enemy::getHalfSize()
 {
 	sf::Vector2u size = this->body.getTexture()->getSize();
-	return sf::Vector2f(size.x / 2, size.y / 2);
+	return sf::Vector2f(size.x / 4 / 2, size.y / 2);
 }

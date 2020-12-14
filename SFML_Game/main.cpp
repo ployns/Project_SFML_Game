@@ -12,30 +12,35 @@
 #include "Enemy.h"
 
 
-///////// ต้องแก้บัค ยิง enemy บางตัวแล้วไม่หายไป //////////
-///////// บางครั้งไม่โดน enemy แล้ว score ขึ้น //////////////
+
+//////////////////////////// chon enemy laew mai pen rai /////////////////////////////////////////////
+
 
 int main()
 {
     int game = 0;
-    int HP = 10;
+    float HP = 10;
+    float HPboss = 20;
     float speed = 1000;
     float y = 0;
     int shoot=false;
     int sc = 0;
-    sf::RenderWindow window(sf::VideoMode(1080, 720), "SFML Tutorial", sf::Style::Close | sf::Style::Resize);//ขนาดจอ
+    int k = 0;
+    sf::RenderWindow window(sf::VideoMode(1080, 720), "DRAGONNN!!!", sf::Style::Close | sf::Style::Resize);//ขนาดจอ
     window.setFramerateLimit(120);
-    
+
     //////////////////////////////////// LoadFromFile ////////////////////////////////////////////////////////////
 
     sf::Texture playerTexture; //sprite dragon
-    playerTexture.loadFromFile("dragon/dragon_total.png"); 
+    playerTexture.loadFromFile("dragon/dragon_total1.png"); 
 
-    sf::Texture enemyTexture;
-    enemyTexture.loadFromFile("dragon/enemybat.png");
+    sf::Texture enemybatTexture;
+    enemybatTexture.loadFromFile("dragon/enemybat.png");
+    sf::Texture enemydragonTexture;
+    enemydragonTexture.loadFromFile("dragon/enemydragon.png");
 
     sf::Texture fireTexture; //sprite fire
-    fireTexture.loadFromFile("dragon/dragon_total.png");
+    fireTexture.loadFromFile("dragon/fire.png");
 
     sf::Texture meteorTexture; //sprite meteor
     meteorTexture.loadFromFile("dragon/meteor.png");
@@ -82,6 +87,14 @@ int main()
     score.setOutlineColor(sf::Color::White);
     score.setPosition(10.0f, 10.0f);
 
+    sf::Text yourscore;
+    std::string yourscoreString;
+    yourscore.setFont(scorefont);
+    yourscore.setCharacterSize(55);
+    yourscore.setFillColor(sf::Color::White);
+    //yourscore.setOutlineColor(sf::Color::White);
+    yourscore.setPosition(130.0f, 480.0f);
+
     sf::Font namefont;
     namefont.loadFromFile("font/Peach Plum.ttf");
 
@@ -90,6 +103,8 @@ int main()
     name.setFont(namefont);
     name.setCharacterSize(30);
     name.setFillColor(sf::Color::Black);
+    name.setOutlineColor(sf::Color::White);
+    name.setOutlineThickness(0.5f);
     name.setPosition(10.0f, 670.0f);
 
 
@@ -106,7 +121,7 @@ int main()
 
     /////////////////////////////////////////////// Sound ////////////////////////////////////////////////////////
     
-    sf::SoundBuffer buffer; //sound(shoot)
+    sf::SoundBuffer buffer; //sound(shoot)  
     buffer.loadFromFile("sound/sound fire.ogg");
     sf::Sound shoot_sound;
     shoot_sound.setBuffer(buffer);
@@ -130,10 +145,12 @@ int main()
     //meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1300)));
 
     std::vector<Enemy> enemylist;
-    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1200, rand() % 680 + 20)));
-    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1300, rand() % 680 + 20)));
-    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1400, rand() % 680 + 20)));
-    enemylist.push_back(Enemy(&enemyTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1500, rand() % 680 + 20)));
+    enemylist.push_back(Enemy(&enemybatTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1200, rand() % 640 + 20)));
+    enemylist.push_back(Enemy(&enemybatTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1300, rand() % 640 + 20)));
+    enemylist.push_back(Enemy(&enemybatTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1400, rand() % 640 + 20)));
+    enemylist.push_back(Enemy(&enemybatTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1500, rand() % 640 + 20)));
+
+    Enemy boss(&enemydragonTexture, sf::Vector2u(6, 1), 0.3f, sf::Vector2f(1000, rand() % 680 + 20));
 
 
     Menu menu(&menuTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
@@ -152,7 +169,7 @@ int main()
     
     int effect = 0;
     double timeEffect = 0;
-    Bullet bulletList(&playerTexture, &effect);
+    Bullet bulletList(&fireTexture, &effect);
 
     float deltaTime = 0.0f;
     sf::Clock clock;
@@ -178,6 +195,7 @@ int main()
                     break;
                 }
             }
+            window.clear();
             nameString = " Napasorn 63010492";
             name.setString(nameString);
             menu.Draw(window);
@@ -187,6 +205,7 @@ int main()
             exit.Draw(window);
             window.draw(name);
             window.display();
+
             if (play.getGlobalBounds(window)) {
                 play.setScale(sf::Vector2f(0.7f,0.7f));
             }
@@ -264,7 +283,10 @@ int main()
             window.close();
         }
         while (game == 5) {
+            yourscoreString = " YOURSCORE : " + std::to_string(sc / 10);
+            yourscore.setString(yourscoreString);
             bggameover.Draw(window);
+            window.draw(yourscore);
             home.Draw(window);
             window.display();
             if (home.getGlobalBounds(window)) {
@@ -282,14 +304,17 @@ int main()
         }
 
         ////////////////////////////////////////////////////////////// in Game ////////////////////////////////////////////////////////////////
+
         deltaTime = clock.restart().asSeconds();
         //std::cout << deltaTime;
         //return 0;
         while (game == 1) {
-            //std::cout << HP << std::endl;
-            std::cout << sc << std::endl;
+
+            std::cout << HPboss << std::endl;
+            //std::cout << sc << std::endl;
             //std::cout << deltaTime << std::endl;
             sc++;
+            //HP = HP - 0.001;
             sf::RectangleShape playerHP(sf::Vector2f(HP * 40, 30));
             playerHP.setFillColor(sf::Color::Red);
             playerHP.setPosition(650, 30);
@@ -297,7 +322,8 @@ int main()
             scoreString = " SCORE : " + std::to_string(sc/10);
             score.setString(scoreString);
 
-            bulletList.positionPlayer = player.getPosition();
+            bulletList.positionPlayer.x = player.getPosition().x + 80 ;
+            bulletList.positionPlayer.y = player.getPosition().y + 45;
             deltaTime = clock.restart().asSeconds();
             while (window.pollEvent(event))
             {
@@ -346,6 +372,7 @@ int main()
                     background[i].setPosition(-3062, position.y);
                 }
             }
+
             ////////////////////////////////// item ////////////////////////////////////////////////////////////////////
 
             if (itemPink.checkColilistion(player.getPosition(), player.getHalfSize())) { //itemPink
@@ -382,6 +409,7 @@ int main()
             }
 
             //////////////////////////////////////// Item Time up ///////////////////////////////////////////////////////////
+
             if (effect == 2 && timeEffect > 0) {
                 timeEffect -= deltaTime;
 
@@ -398,21 +426,24 @@ int main()
                     speedBackground = -1.5;
                 }
             }
+
             /////////////////////////////////////////////// meteor checkchon /////////////////////////////////////////////////////////////
             for (int i = 0; i < 4; i++) {
                 if ((meteorlist[i].checkColilistion(player.getPosition(), player.getHalfSize())&& effect!=3)) {
                     meteorlist[i].setPosition(sf::Vector2f(-500, -500));
                     player.actionHurt();
                     HP--;
-                    if (HP <= 0) {
-                        game = 5;
-                    }
+                    
                 }
                 meteorlist[i].reset(-500.0f);
             }
+            if (HP <= 0) {
+                game = 5;
+            }
+
 
             //////////////////////////////////////////////////////////////////////////////////// บัคคคคคคคคคคคคคคคคคคค
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < enemylist.size(); i++) {
                 if ((enemylist[i].checkColilistion(player.getPosition(), player.getHalfSize()) && effect != 3)) {
                     enemylist[i].setPosition(sf::Vector2f(-500, -500));
                     player.actionHurt();
@@ -421,17 +452,52 @@ int main()
                 enemylist[i].reset(-200.0f);
             }
             
-            for (int i = 0; i < 4; i++) {
-                if (enemylist[i].checkColilistion(bulletList.getPosition(), bulletList.getHalfSize())&&enemylist[i].getPosition().x <= 1080) {
-                    enemylist[i].setPosition(sf::Vector2f(-500, -500));
-                    sc = sc + 500;
+            for (int i = 0; i < enemylist.size(); i++) {
+                for (int j = 0; j < bulletList.getBulletSize(); j++) {
+                    if (enemylist[i].checkColilistion(bulletList.getPosition(j), bulletList.getHalfSize())&&enemylist[i].getPosition().x <= 1080) {
+                        enemylist[i].setPosition(sf::Vector2f(-500, -500));
+                        sc = sc + 500;
+                    }
+                    enemylist[i].reset(-200.0f);
                 }
-                enemylist[i].reset(-200.0f);
-                
-
             }
 
-            
+            /*for (int j = 0; j < bulletList.getBulletSize(); j++) {
+                if (boss.checkColilistion(bulletList.getPosition(j), bulletList.getHalfSize()) && boss.getPosition().x <= 1080) {
+                    HPboss=;
+                }
+                
+            }
+
+            if (HPboss <= 0) {
+                boss.setPosition(sf::Vector2f(-500, -500));
+                boss.reset(-500.0f);
+                sc = sc + 5000;
+            }*/
+
+            //if (sc <= 10000) {
+            //    
+            //}
+
+            if (sc >= 30000 && sc < 60000) {
+                for (int i = 0; i < enemylist.size(); i++) {
+                    enemylist[i].move(deltaTime * 0.5);
+                }
+                for (int i = 0; i < meteorlist.size(); i++) {
+                    meteorlist[i].move(deltaTime * 0.5);
+                }
+            }
+
+            if (sc >= 60000) {
+                for (int i = 0; i < enemylist.size(); i++) {
+                    enemylist[i].move(deltaTime * 0.7);
+                }
+                for (int i = 0; i < meteorlist.size(); i++) {
+                    meteorlist[i].move(deltaTime * 0.7);
+                }
+            }
+
+
 
             ///////////////////////////////////// Draw /////////////////////////////////////////////////////////////
             window.clear(sf::Color(240, 185, 246));
@@ -448,6 +514,8 @@ int main()
             window.draw(playerHP);
             window.draw(score);
             heart.Draw(window);
+           // boss.Draw(window, deltaTime);
+
             window.display();
         }
 

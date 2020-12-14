@@ -30,8 +30,8 @@ bool Item::checkColilistion(sf::Vector2f posPlayer, sf::Vector2f halfSizePlayer)
 {
 	//cout << "Player : "<< posPlayer.x << " " << posPlayer.y << endl;
 	//cout << "Item : " << this->body.getPosition().x << " " << this->body.getPosition().y << endl;
-	return (abs(posPlayer.x - this->body.getPosition().x) < (halfSizePlayer.x * 0.8 + this->getHalfSize().x * 0.6) &&
-		abs(posPlayer.y - this->body.getPosition().y) < (halfSizePlayer.y * 0.8 + this->getHalfSize().y * 0.6));
+	return (abs(posPlayer.x - this->body.getPosition().x) < (halfSizePlayer.x * 0.6 + this->getHalfSize().x * 0.6) &&
+		abs(posPlayer.y - this->body.getPosition().y) < (halfSizePlayer.y * 0.6 + this->getHalfSize().y * 0.6));
 }
 
 void Item::setPosition(sf::Vector2f pos)

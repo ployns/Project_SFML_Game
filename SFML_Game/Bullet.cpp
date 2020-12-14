@@ -4,7 +4,7 @@ Bullet::Bullet(sf::Texture* texture, int* effect)
 {
     this->effect = effect;
     for (int i = 0; i < fire_num; i++) {
-        Fire fire(texture, sf::Vector2u(4, 6), 0.3f, sf::Vector2f(100, 100));
+        Fire fire(texture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(100, 100));
         fires.push_back(fire);
     }
 }
@@ -38,12 +38,16 @@ void Bullet::Draw(sf::RenderWindow& window)
     }
 }
 
-sf::Vector2f Bullet::getPosition()
+int Bullet::getBulletSize()
 {
-    for (int i = 0; i < fire_num; i++) {
-        return this->fires[i].getPosition();
+    return this->fire_num;
+}
+
+sf::Vector2f Bullet::getPosition(int idex)
+{
+    if (idex >= 0 and idex <= fire_num) {
+        return this->fires[idex].getPosition();
     }
-    
 }
 
 

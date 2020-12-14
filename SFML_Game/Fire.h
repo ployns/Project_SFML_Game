@@ -23,8 +23,10 @@ public:
 	double getDeltaDistance();
 	void setEffect(int state);
 	int getEffect();
-private:
 	void move(float deltaTime);
+
+private:
+	//void move(float deltaTime);
 	bool active = false;
 	Animation Animation;
 	sf::RectangleShape shape;
