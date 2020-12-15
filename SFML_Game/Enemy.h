@@ -5,7 +5,7 @@
 class Enemy
 {
 public:
-	Enemy(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f position);
+	Enemy(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f position, sf::Vector2f scale);
 	~Enemy();
 	void Draw(sf::RenderWindow& window, float _deltatime);
 	bool checkColilistion(sf::Vector2f posPlayer, sf::Vector2f halfSizePlayer);

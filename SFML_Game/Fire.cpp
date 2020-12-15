@@ -33,6 +33,7 @@ void Fire::setActive(bool status)
 	if (status == true) {
 		startPosition = this->body.getPosition().x;
 	}
+
 }
 
 bool Fire::isActive()
@@ -93,6 +94,7 @@ void Fire::move(float deltaTime)
 	if (this->body.getPosition().x > 1000) 
 	{
 		this->setActive(false);
+		this->body.setPosition(sf::Vector2f(-3000, -4000));
 	}
 	else
 	{

@@ -3,12 +3,20 @@
 ///////////////////////////////////// copy meteor ////////////////////////////////////////////////////
 
 
-Enemy::Enemy(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f position) :
+Enemy::Enemy(sf::Texture* texture, sf::Vector2u imageCount, float switchTime, sf::Vector2f position, sf::Vector2f scale) :
 	Animation(texture, imageCount, switchTime)
 {
-	this->body.setScale(sf::Vector2f(1.5, 1.5));
+	this->body.setScale(scale);
 	this->body.setPosition(position);
 	this->body.setTexture(*texture);
+
+	//this->shape.setPosition(this->body.getPosition().x + 25, this->body.getPosition().y + 15);
+	//this->shape.setSize(sf::Vector2f(100,50));
+
+	//this->shape.setFillColor(sf::Color::Transparent);
+	//this->shape.setOutlineThickness(1);
+	//this->shape.setOutlineColor(sf::Color::Red);
+	
 
 	//this->Update(deltaTime);
 }
@@ -28,13 +36,17 @@ void Enemy::Draw(sf::RenderWindow& window, float _deltatime)
 		window.draw(body);
 		this->Update(_deltatime);
 		this->move(_deltatime);
+		//window.draw(this->shape);
+
 	}
 }
 
 bool Enemy::checkColilistion(sf::Vector2f posPlayer, sf::Vector2f halfSizePlayer)
 {
+	/*std::cout << abs(posPlayer.x - this->body.getPosition().x) << " " << (halfSizePlayer.x * 0.5 + this->getHalfSize().x * 0.5) << " " <<
+		abs(posPlayer.y - this->body.getPosition().y) << " " << (halfSizePlayer.y * 0.8 + this->getHalfSize().y * 0.8) << std::endl;*/
 	return (abs(posPlayer.x - this->body.getPosition().x) < (halfSizePlayer.x * 0.5 + this->getHalfSize().x * 0.5) &&
-		abs(posPlayer.y - this->body.getPosition().y) < (halfSizePlayer.y * 0.5 + this->getHalfSize().y * 0.5));
+		abs(posPlayer.y - this->body.getPosition().y) < (halfSizePlayer.y * 0.8 + this->getHalfSize().y * 0.8));
 }
 
 void Enemy::setPosition(sf::Vector2f pos)
@@ -56,7 +68,7 @@ void Enemy::Update(float deltaTime)
 void Enemy::reset(float pos)
 {
 	if (this->body.getPosition().x <= pos) {
-		this->body.setPosition(sf::Vector2f(1200, rand() % 640 + 20));
+		this->body.setPosition(sf::Vector2f(1200, rand() % 640 + 20 ));
 	}
 }
 

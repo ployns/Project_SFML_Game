@@ -8,9 +8,12 @@ public:
 	Bullet(sf::Texture* texture, int *effect);
 	~Bullet();
 	void Draw(sf::RenderWindow& window);
+	//void erase();
 	int getBulletSize();
 	sf::Vector2f getPosition(int idex);
-	sf::Vector2f getHalfSize();
+	void setPosition(sf::Vector2f pos, int idex);
+	sf::Vector2f getHalfSize(int idex);
+	bool isActive(int idx);
 	sf::Vector2f positionPlayer;
 	sf::Event* evnt;
 	bool canAttack();

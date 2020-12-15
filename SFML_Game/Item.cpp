@@ -47,7 +47,7 @@ sf::Vector2f Item::getPosition()
 void Item::reset(float pos)
 {
 	if (this->body.getPosition().x <= pos) {
-		this->body.setPosition(sf::Vector2f(rand() % 8000 + 4000, rand() % 550 + 100));
+		this->body.setPosition(sf::Vector2f(rand() % 10000 + 5000, rand() % 550 + 100));
 	}
 }
 

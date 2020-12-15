@@ -1,31 +1,39 @@
-﻿#include <SFML/Graphics.hpp>
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML\Audio.hpp>
+#include<SFML\System.hpp>
+#include<SFML\Network.hpp>
 #include <iostream>
+#include <vector>
+#include<ctime>
+#include<cstdlib>
+#include<algorithm>
+#include<string>
+#include<utility>
+#include<stdio.h>
 #include "Animation.h"
 #include "Player.h"
-#include <vector>
 #include "Bullet.h"
 #include "Item.h"
 #include "Meteor.h"
 #include "Menu.h"
 #include "Enemy.h"
 
-
-
-//////////////////////////// chon enemy laew mai pen rai /////////////////////////////////////////////
+void showText(sf::Vector2f position, std::string word, sf::Font* font, int size, sf::RenderWindow& window);
 
 
 int main()
 {
     int game = 0;
     float HP = 10;
-    float HPboss = 20;
+    float HPboss = 5;
     float speed = 1000;
     float y = 0;
     int shoot=false;
     int sc = 0;
-    int k = 0;
+    int boss = 0;
+    bool ready = false;
     sf::RenderWindow window(sf::VideoMode(1080, 720), "DRAGONNN!!!", sf::Style::Close | sf::Style::Resize);//ขนาดจอ
     window.setFramerateLimit(120);
 
@@ -74,7 +82,7 @@ int main()
     homeTexture.loadFromFile("menu/home.png");
 
 
-    /////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////    TEXT   //////////////////////////////////////////////////
 
     sf::Font scorefont;
     scorefont.loadFromFile("font/joystix.monospace.ttf");
@@ -82,10 +90,10 @@ int main()
     sf::Text score;
     std::string scoreString;
     score.setFont(scorefont);
-    score.setCharacterSize(40);
+    score.setCharacterSize(30);
     score.setFillColor(sf::Color::Black);
     score.setOutlineColor(sf::Color::White);
-    score.setPosition(10.0f, 10.0f);
+    score.setPosition(10.0f, 20.0f);
 
     sf::Text yourscore;
     std::string yourscoreString;
@@ -107,8 +115,43 @@ int main()
     name.setOutlineThickness(0.5f);
     name.setPosition(10.0f, 670.0f);
 
+    /////////////////////////////////////////////// What's your name ///////////////////////////////////////////////
 
-    ////////////////////////
+    sf::RectangleShape object;
+    object.setSize(sf::Vector2f(300.0f, 70.0f));
+    object.setOrigin(sf::Vector2f(150.0f, 35.0f));
+    object.setPosition(sf::Vector2f(550, 450.0f)); // Edit here
+
+    sf::RectangleShape cursor;
+    cursor.setSize(sf::Vector2f(5.0f, 64.0f));
+    cursor.setOrigin(sf::Vector2f(2.5f, 32.0f));
+    cursor.setPosition(sf::Vector2f(405, 450.0f)); // Edit here
+    cursor.setFillColor(sf::Color::Black);
+
+    float totalTime = 0;
+    bool state = false;
+
+    char last_char = ' ';
+
+    std::string input;
+
+    sf::Text text;
+    text.setFont(scorefont);
+    text.setCharacterSize(30);
+    text.setFillColor(sf::Color::Black);
+    text.setPosition(400, 425);
+
+    sf::Text enteryourname;
+    std::string enteryournameString;
+    enteryourname.setFont(scorefont);
+    enteryourname.setCharacterSize(30);
+    enteryourname.setFillColor(sf::Color::Black);
+    enteryourname.setOutlineColor(sf::Color::White);
+    enteryourname.setOutlineThickness(1);
+    enteryourname.setPosition(360.0f, 350.0f);
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     float speedBackground = -1.5;
     sf::Texture BackgroundTexture[2]; //background
@@ -145,12 +188,18 @@ int main()
     //meteorlist.push_back(Meteor(&meteorTexture, sf::Vector2u(3, 1), 0.3f, sf::Vector2f(rand() % 2000, -rand() % 1300)));
 
     std::vector<Enemy> enemylist;
-    enemylist.push_back(Enemy(&enemybatTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1200, rand() % 640 + 20)));
-    enemylist.push_back(Enemy(&enemybatTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1300, rand() % 640 + 20)));
-    enemylist.push_back(Enemy(&enemybatTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1400, rand() % 640 + 20)));
-    enemylist.push_back(Enemy(&enemybatTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1500, rand() % 640 + 20)));
+    enemylist.push_back(Enemy(&enemybatTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1200, rand() % 640 + 20), sf::Vector2f(1.5, 1.5)));
+    enemylist.push_back(Enemy(&enemybatTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1300, rand() % 640 + 20), sf::Vector2f(1.5, 1.5)));
+    enemylist.push_back(Enemy(&enemybatTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1400, rand() % 640 + 20), sf::Vector2f(1.5, 1.5)));
+    enemylist.push_back(Enemy(&enemybatTexture, sf::Vector2u(4, 1), 0.3f, sf::Vector2f(1500, rand() % 640 + 20), sf::Vector2f(1.5, 1.5)));
 
-    Enemy boss(&enemydragonTexture, sf::Vector2u(6, 1), 0.3f, sf::Vector2f(1000, rand() % 680 + 20));
+
+    std::vector<Enemy> enemylist2;
+    enemylist2.push_back(Enemy(&enemydragonTexture, sf::Vector2u(6, 1), 0.3f, sf::Vector2f(10200, rand() % 640 + 20), sf::Vector2f(0.8, 1)));
+    //enemylist2.push_back(Enemy(&enemydragonTexture, sf::Vector2u(6, 1), 0.3f, sf::Vector2f(10500, rand() % 640 + 20), sf::Vector2f(0.8, 1)));
+    //enemylist2.push_back(Enemy(&enemydragonTexture, sf::Vector2u(6, 1), 0.3f, sf::Vector2f(10800, rand() % 640 + 20), sf::Vector2f(0.8, 1)));
+    //enemylist2.push_back(Enemy(&enemydragonTexture, sf::Vector2u(6, 1), 0.3f, sf::Vector2f(1500, rand() % 640 + 20), sf::Vector2f(0.8, 1)));
+
 
 
     Menu menu(&menuTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
@@ -162,9 +211,28 @@ int main()
     Menu hightscorebg(&highscorebgTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
     Menu back(&backTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(20.0f, 10.0f));
     Menu bggameover(&bggameoverTexture, sf::Vector2f(1, 1), sf::Vector2f(0.0f, 0.0f));
-    Menu home(&homeTexture, sf::Vector2f(0.6, 0.6), sf::Vector2f(900.0f, 580.0f));
+    Menu home(&homeTexture, sf::Vector2f(0.7, 0.7), sf::Vector2f(450.0f, 580.0f));
 
     Menu heart(&itemHeartTexture, sf::Vector2f(1, 1), sf::Vector2f(580.0f, 0.0f));
+
+
+/////////////////////////// HIGHSCORE //////////////////////////////////////////
+
+    std::vector<std::pair<int, std::string>> highScore;
+    FILE* file;
+    char temp[25];
+    std::string nameArr[6];
+    int scoreArr[6];
+    bool collectHS = false;
+    file = fopen("./highScore.txt", "r");
+    for (int i = 0; i < 5; i++) {
+        fscanf(file, "%s", temp);
+        nameArr[i] = temp;
+        fscanf(file, "%d", &scoreArr[i]);
+        highScore.push_back(std::make_pair(scoreArr[i], nameArr[i]));
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
 
     
     int effect = 0;
@@ -182,9 +250,10 @@ int main()
 
     while (window.isOpen())
     {
+        deltaTime = clock.restart().asSeconds();
         
 
-        /////////////////////////////////////////////////////// menu /////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////// game = 0 menu /////////////////////////////////////////////////////////////
         while (game == 0) { 
             while (window.pollEvent(event))
             {
@@ -247,6 +316,88 @@ int main()
             }
         }
 
+        //////////////////////////////////////////////// game = 1 /////////////////////////////////////////////////////////////
+
+        while (game == 1) {
+
+
+
+            while (window.pollEvent(event))
+            {
+                switch (event.type)
+                {
+                case sf::Event::Closed:
+                    window.close();
+                    break;
+                }
+            }
+            if (event.type == sf::Event::EventType::TextEntered)
+            {
+                if (last_char != event.text.unicode && event.text.unicode == 13 &&
+                    input.length() > 0) // delete
+                {
+                    game = 6;
+                }
+                else if (last_char != event.text.unicode && event.text.unicode == 8 &&
+                    input.length() > 0) // delete
+                {
+
+                    last_char = event.text.unicode;
+                    input.erase(input.length() - 1);
+                    text.setString(input);
+                    cursor.setPosition(400.0f + text.getGlobalBounds().width + 5, 450.0f);
+                    std::cout << input << std::endl;
+
+                }
+                else if (last_char != event.text.unicode &&
+                    (event.text.unicode >= 'a' && event.text.unicode <= 'z' ||
+                        event.text.unicode >= 'A' && event.text.unicode <= 'Z' ||
+                        event.text.unicode >= '0' && event.text.unicode <= '9'))
+                {
+                    //std::cout << event.text.unicode << std::endl;
+                    last_char = event.text.unicode;
+
+                    input += event.text.unicode;
+
+                    text.setString(input);
+
+                    cursor.setPosition(400.0f + text.getGlobalBounds().width + 5, 450.0f);
+
+                    std::cout << input << std::endl;
+                }
+
+            }
+
+            if (event.type == sf::Event::EventType::KeyReleased && last_char != ' ')
+            {
+                last_char = ' ';
+            }
+
+            window.clear();
+            window.draw(object);
+
+            totalTime += clock.restart().asSeconds();
+            if (totalTime >= 0.5)
+            {
+                totalTime = 0;
+                state = !state;
+            }
+            if (state == true)
+            {
+                window.draw(cursor);
+            }
+
+            window.draw(text);
+            enteryournameString = "ENTER YOUR NAME";
+            enteryourname.setString(enteryournameString);
+            window.draw(enteryourname);
+            window.display();
+
+
+        }
+
+        //////////////////////////////////////////////// game = 2 /////////////////////////////////////////////////////////////
+
         while (game == 2) {
             howtoplay.Draw(window);
             back.Draw(window);
@@ -263,10 +414,36 @@ int main()
             }
         }
 
+        //////////////////////////////////////////////// game = 3 /////////////////////////////////////////////////////////////
+
         while (game == 3) { ////////////////////////////////////////////////// ยังไม่เสร็จ //////////////////////////////////////////////////
+
             hightscorebg.Draw(window);
             back.Draw(window);
-            window.display();
+            if (ready == true) {
+
+                highScore.erase(highScore.begin(), highScore.end());
+                file = fopen("./highScore.txt", "r");
+                for (int i = 0; i < 5; i++) {
+                    fscanf(file, "%s", temp);
+                    nameArr[i] = temp;
+                    fscanf(file, "%d", &scoreArr[i]);
+                    highScore.push_back(std::make_pair(scoreArr[i], nameArr[i]));
+                }
+                ready = false;
+            }
+
+            showText(sf::Vector2f(300.0f, 345.0f), highScore[0].second, &scorefont, 35, window);
+            showText(sf::Vector2f(530.0f, 345.0f), std::to_string(highScore[0].first), &scorefont, 35, window);
+            showText(sf::Vector2f(300.0f, 395.0f), highScore[1].second, &scorefont, 35, window);
+            showText(sf::Vector2f(530.0f, 395.0f), std::to_string(highScore[1].first), &scorefont, 35, window);
+            showText(sf::Vector2f(300.0f, 445.0f), highScore[2].second, &scorefont, 35, window);
+            showText(sf::Vector2f(530.0f, 445.0f), std::to_string(highScore[2].first), &scorefont, 35, window);
+            showText(sf::Vector2f(300.0f, 495.0f), highScore[3].second, &scorefont, 35, window);
+            showText(sf::Vector2f(530.0f, 495.0f), std::to_string(highScore[3].first), &scorefont, 35, window);
+            showText(sf::Vector2f(300.0f, 545.0f), highScore[4].second, &scorefont, 35, window);
+            showText(sf::Vector2f(530.0f, 545.0f), std::to_string(highScore[4].first), &scorefont, 35, window);
+
             if (back.getGlobalBounds(window)) {
                 back.setScale(sf::Vector2f(0.7f, 0.7f));
             }
@@ -277,53 +454,93 @@ int main()
             {
                 game = 0;
             }
+
+
+            window.display();
         }
+
+        //////////////////////////////////////////////// game = 4 /////////////////////////////////////////////////////////////
 
         while (game == 4) {
             window.close();
         }
+
+        //////////////////////////////////////////////// game = 5 /////////////////////////////////////////////////////////////
+
         while (game == 5) {
-            yourscoreString = " YOURSCORE : " + std::to_string(sc / 10);
+            yourscoreString = " YOURSCORE : " + std::to_string(sc / 30);
             yourscore.setString(yourscoreString);
             bggameover.Draw(window);
             window.draw(yourscore);
             home.Draw(window);
             window.display();
+
+            if (!collectHS) {
+                highScore.erase(highScore.begin(), highScore.end());
+                file = fopen("./highScore.txt", "r");
+                for (int i = 0; i < 5; i++) {
+                    fscanf(file, "%s", temp);
+                    nameArr[i] = temp;
+                    fscanf(file, "%d", &scoreArr[i]);
+                    highScore.push_back(std::make_pair(scoreArr[i], nameArr[i]));
+                }
+
+                highScore.push_back(std::make_pair(sc/30, input));
+                std::sort(highScore.begin(), highScore.end());
+                fclose(file);
+                file = fopen("./highScore.txt", "w");
+                char temp[26];
+                for (int i = 5; i >= 1; i--) {
+                    strcpy(temp, highScore[i].second.c_str());
+                    fprintf(file, "%s %d\n", temp, highScore[i].first);
+                }
+                fclose(file);
+                collectHS = true;
+            }
+
             if (home.getGlobalBounds(window)) {
                 home.setScale(sf::Vector2f(0.8, 0.8));
             }
             else {
-                home.setScale(sf::Vector2f(0.6f, 0.6f));
+                home.setScale(sf::Vector2f(0.7f, 0.7f));
             }
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
             {
                 if (home.getGlobalBounds(window)) {
-                    game = 0;
+                    game = 4;
                 }
             }
         }
 
-        ////////////////////////////////////////////////////////////// in Game ////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////// game = 6  in Game ////////////////////////////////////////////////////////////////
 
-        deltaTime = clock.restart().asSeconds();
-        //std::cout << deltaTime;
-        //return 0;
-        while (game == 1) {
+
+        while (game == 6) {
 
             std::cout << HPboss << std::endl;
             //std::cout << sc << std::endl;
             //std::cout << deltaTime << std::endl;
             sc++;
-            //HP = HP - 0.001;
+
+            text.setPosition(player.getPosition().x+70,player.getPosition().y+130);
+            text.setFillColor(sf::Color::White);
+            text.setFont(scorefont);
+            text.setCharacterSize(15);
+
             sf::RectangleShape playerHP(sf::Vector2f(HP * 40, 30));
             playerHP.setFillColor(sf::Color::Red);
             playerHP.setPosition(650, 30);
 
-            scoreString = " SCORE : " + std::to_string(sc/10);
+            scoreString = " SCORE : " + std::to_string(sc/30);
             score.setString(scoreString);
 
             bulletList.positionPlayer.x = player.getPosition().x + 80 ;
             bulletList.positionPlayer.y = player.getPosition().y + 45;
+
+            for (int i = 0; i < enemylist2.size(); i++) {
+                enemylist2[i].move(deltaTime * 0.5);
+            }
+
             deltaTime = clock.restart().asSeconds();
             while (window.pollEvent(event))
             {
@@ -443,41 +660,69 @@ int main()
 
 
             //////////////////////////////////////////////////////////////////////////////////// บัคคคคคคคคคคคคคคคคคคค
+            //std::cout << effect<<" and postition" <<enemylist[0].getPosition().x << " : " << enemylist[0].getPosition().y << "    " << player.getPosition().x << " " << player.getPosition().y << " " << std::endl;
             for (int i = 0; i < enemylist.size(); i++) {
-                if ((enemylist[i].checkColilistion(player.getPosition(), player.getHalfSize()) && effect != 3)) {
+                
+                if ((enemylist[i].checkColilistion(player.getPosition(), player.getHalfSize()) && effect != 3)  ) {
                     enemylist[i].setPosition(sf::Vector2f(-500, -500));
                     player.actionHurt();
                     HP--;
                 }
                 enemylist[i].reset(-200.0f);
             }
-            
             for (int i = 0; i < enemylist.size(); i++) {
                 for (int j = 0; j < bulletList.getBulletSize(); j++) {
-                    if (enemylist[i].checkColilistion(bulletList.getPosition(j), bulletList.getHalfSize())&&enemylist[i].getPosition().x <= 1080) {
-                        enemylist[i].setPosition(sf::Vector2f(-500, -500));
+                    if (bulletList.isActive(j) == false) {
+                        continue;
+                    }
+                    if (enemylist[i].checkColilistion(bulletList.getPosition(j), bulletList.getHalfSize(j))
+                        ) {
+                        enemylist[i].setPosition(sf::Vector2f(-3000, -3000));
                         sc = sc + 500;
+                        bulletList.setPosition(sf::Vector2f(1001, -100),j);
+                       //std::cout << "enemy " << i  << " -- "<< j << std::endl;
+                        break;
                     }
                     enemylist[i].reset(-200.0f);
                 }
             }
 
-            /*for (int j = 0; j < bulletList.getBulletSize(); j++) {
-                if (boss.checkColilistion(bulletList.getPosition(j), bulletList.getHalfSize()) && boss.getPosition().x <= 1080) {
-                    HPboss=;
+            /////////////////////////////////  บอสยิงแล้วไม่ได้คะแนน //////////////////////////////////////////////
+      
+
+            for (int i = 0; i < enemylist2.size(); i++) {
+                for (int j = 0; j < bulletList.getBulletSize(); j++) {
+                    if (bulletList.isActive(j) == false) {
+                        continue;
+                    }
+                    if (enemylist2[i].checkColilistion(bulletList.getPosition(j), bulletList.getHalfSize(j))&&enemylist2[i].getPosition().x<=1080) {
+                        bulletList.setPosition(sf::Vector2f(1001, -100), j);
+                        HPboss--;
+                        //enemylist2[i].setPosition(sf::Vector2f(-3000, -3000));
+                        //std::cout << "enemy " << i  << " -- "<< j << std::endl;
+                        break;
+                    }
                 }
-                
             }
 
-            if (HPboss <= 0) {
-                boss.setPosition(sf::Vector2f(-500, -500));
-                boss.reset(-500.0f);
+            /*if (HPboss <= 0) {
+                for (int i = 0; i < enemylist2.size(); i++) {
+                    enemylist2[i].setPosition(sf::Vector2f(rand() % 10000 + 6000, rand() % 640 + 20));
+                    enemylist2[i].reset(-500.0f);
+                    boss = 1;
+                }
+            }
+
+            if (boss == 1) {
                 sc = sc + 5000;
+                boss = 0;
             }*/
 
-            //if (sc <= 10000) {
-            //    
-            //}
+         
+
+            
+            ///////////////////////////// LEVEL //////////////////////////////////////////
+            
 
             if (sc >= 30000 && sc < 60000) {
                 for (int i = 0; i < enemylist.size(); i++) {
@@ -488,7 +733,16 @@ int main()
                 }
             }
 
-            if (sc >= 60000) {
+            if (sc >= 60000 && sc<90000) {
+                for (int i = 0; i < enemylist.size(); i++) {
+                    enemylist[i].move(deltaTime * 0.6);
+                }
+                for (int i = 0; i < meteorlist.size(); i++) {
+                    meteorlist[i].move(deltaTime * 0.6);
+                }
+            }
+
+            if (sc >= 90000) {
                 for (int i = 0; i < enemylist.size(); i++) {
                     enemylist[i].move(deltaTime * 0.7);
                 }
@@ -513,13 +767,26 @@ int main()
                 enemylist.Draw(window, deltaTime);
             window.draw(playerHP);
             window.draw(score);
+            window.draw(text);
             heart.Draw(window);
-           // boss.Draw(window, deltaTime);
+            for (Enemy& enemylist2 : enemylist2)
+                enemylist2.Draw(window, deltaTime);
 
             window.display();
         }
 
     }
     return 0;
+}
+void showText(sf::Vector2f position, std::string word, sf::Font* font, int size, sf::RenderWindow& window) {
+    sf::Text text;
+    text.setFont(*font);
+    text.setPosition(position);
+    text.setString(word);
+    text.setCharacterSize(size);
+    text.setFillColor(sf::Color::Black);
+    //text.setOutlineColor(sf::Color::White);
+    //text.setOutlineThickness(1);
+    window.draw(text);
 }
 

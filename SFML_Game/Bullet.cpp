@@ -26,17 +26,25 @@ void Bullet::Draw(sf::RenderWindow& window)
             fires[i].Update(deltaTime);
             fires[i].Draw(window);
 
-            if (fires[i].getDeltaDistance() > 200 && fires[i].getEffect() == 1) {
+            /*if (fires[i].getDeltaDistance() > 200 && fires[i].getEffect() == 1) {
                 fires[i].setEffect(0);
                 fires[i + 1].setEffect(0);
                 fires[i + 2].setEffect(0);
-                fires[i].setY(-50);
+                fires[i].setY(-100);
                 fires[i+1].setY(+50);
                 i += 3;
-            }
+            }*/
         }
     }
 }
+
+//void Bullet::erase()
+//{
+//    for (int i = 0; i < fire_num; i++) {
+//        this->fires.erase(fires.begin() + i);
+//    }
+//    
+//}
 
 int Bullet::getBulletSize()
 {
@@ -50,12 +58,25 @@ sf::Vector2f Bullet::getPosition(int idex)
     }
 }
 
-
-sf::Vector2f Bullet::getHalfSize()
+void Bullet::setPosition(sf::Vector2f pos, int idex)
 {
-    for (int i = 0; i < fire_num; i++) {
-        return this->fires[i].getHalfSize();
+    if (idex >= 0 and idex <= fire_num)
+    {
+        this->fires[idex].setPosition(pos);
     }
+}
+
+
+sf::Vector2f Bullet::getHalfSize(int idex)
+{
+    if (idex >= 0 and idex <= fire_num) {
+        return this->fires[idex].getHalfSize();
+    }
+}
+
+bool Bullet::isActive(int idx)
+{
+    return this->fires[idx].isActive();
 }
 
 bool Bullet::canAttack()
