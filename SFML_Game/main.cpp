@@ -34,7 +34,7 @@ int main()
     int sc = 0;
     int boss = 0;
     bool ready = false;
-    sf::RenderWindow window(sf::VideoMode(1080, 720), "DRAGONNN!!!", sf::Style::Close | sf::Style::Resize);//ขนาดจอ
+    sf::RenderWindow window(sf::VideoMode(1080, 720), "DRAGON by Napasorn 63010492", sf::Style::Close | sf::Style::Resize);//ขนาดจอ
     window.setFramerateLimit(120);
 
     //////////////////////////////////// LoadFromFile ////////////////////////////////////////////////////////////
@@ -434,15 +434,15 @@ int main()
             }
 
             showText(sf::Vector2f(300.0f, 345.0f), highScore[0].second, &scorefont, 35, window);
-            showText(sf::Vector2f(530.0f, 345.0f), std::to_string(highScore[0].first), &scorefont, 35, window);
+            showText(sf::Vector2f(550.0f, 345.0f), std::to_string(highScore[0].first), &scorefont, 35, window);
             showText(sf::Vector2f(300.0f, 395.0f), highScore[1].second, &scorefont, 35, window);
-            showText(sf::Vector2f(530.0f, 395.0f), std::to_string(highScore[1].first), &scorefont, 35, window);
+            showText(sf::Vector2f(550.0f, 395.0f), std::to_string(highScore[1].first), &scorefont, 35, window);
             showText(sf::Vector2f(300.0f, 445.0f), highScore[2].second, &scorefont, 35, window);
-            showText(sf::Vector2f(530.0f, 445.0f), std::to_string(highScore[2].first), &scorefont, 35, window);
+            showText(sf::Vector2f(550.0f, 445.0f), std::to_string(highScore[2].first), &scorefont, 35, window);
             showText(sf::Vector2f(300.0f, 495.0f), highScore[3].second, &scorefont, 35, window);
-            showText(sf::Vector2f(530.0f, 495.0f), std::to_string(highScore[3].first), &scorefont, 35, window);
+            showText(sf::Vector2f(550.0f, 495.0f), std::to_string(highScore[3].first), &scorefont, 35, window);
             showText(sf::Vector2f(300.0f, 545.0f), highScore[4].second, &scorefont, 35, window);
-            showText(sf::Vector2f(530.0f, 545.0f), std::to_string(highScore[4].first), &scorefont, 35, window);
+            showText(sf::Vector2f(550.0f, 545.0f), std::to_string(highScore[4].first), &scorefont, 35, window);
 
             if (back.getGlobalBounds(window)) {
                 back.setScale(sf::Vector2f(0.7f, 0.7f));
@@ -659,7 +659,7 @@ int main()
             }
 
 
-            //////////////////////////////////////////////////////////////////////////////////// บัคคคคคคคคคคคคคคคคคคค
+            //////////////////////////////////////////////////////////////////////////////////// 
             //std::cout << effect<<" and postition" <<enemylist[0].getPosition().x << " : " << enemylist[0].getPosition().y << "    " << player.getPosition().x << " " << player.getPosition().y << " " << std::endl;
             for (int i = 0; i < enemylist.size(); i++) {
                 
@@ -690,35 +690,25 @@ int main()
             /////////////////////////////////  บอสยิงแล้วไม่ได้คะแนน //////////////////////////////////////////////
       
 
-            for (int i = 0; i < enemylist2.size(); i++) {
-                for (int j = 0; j < bulletList.getBulletSize(); j++) {
-                    if (bulletList.isActive(j) == false) {
-                        continue;
-                    }
-                    if (enemylist2[i].checkColilistion(bulletList.getPosition(j), bulletList.getHalfSize(j))&&enemylist2[i].getPosition().x<=1080) {
-                        bulletList.setPosition(sf::Vector2f(1001, -100), j);
-                        HPboss--;
-                        //enemylist2[i].setPosition(sf::Vector2f(-3000, -3000));
-                        //std::cout << "enemy " << i  << " -- "<< j << std::endl;
-                        break;
-                    }
-                }
-            }
+            //for (int i = 0; i < enemylist2.size(); i++) {
+            //    for (int j = 0; j < bulletList.getBulletSize(); j++) {
+            //        if (bulletList.isActive(j) == false) {
+            //            continue;
+            //        }
+            //        if (enemylist2[i].checkColilistion(bulletList.getPosition(j), bulletList.getHalfSize(j))&&enemylist2[i].getPosition().x<=1080) {
+            //            bulletList.setPosition(sf::Vector2f(1001, -100), j);
+            //            HPboss--;
+            //            //enemylist2[i].setPosition(sf::Vector2f(-3000, -3000));
+            //            //std::cout << "enemy " << i  << " -- "<< j << std::endl;
+            //            break;
+            //        }
+            //    }
+            //}
 
-            /*if (HPboss <= 0) {
-                for (int i = 0; i < enemylist2.size(); i++) {
-                    enemylist2[i].setPosition(sf::Vector2f(rand() % 10000 + 6000, rand() % 640 + 20));
-                    enemylist2[i].reset(-500.0f);
-                    boss = 1;
-                }
-            }
-
-            if (boss == 1) {
-                sc = sc + 5000;
-                boss = 0;
-            }*/
-
-         
+            // if (HPboss <= 0) {
+            //    for (int i = 0; i < enemylist2.size(); i++) {
+            //        enemylist2[i].setPosition(sf::Vector2f(-3000, -3000));                }
+            //}
 
             
             ///////////////////////////// LEVEL //////////////////////////////////////////
@@ -757,7 +747,6 @@ int main()
             window.clear(sf::Color(240, 185, 246));
             window.draw(background[0]);
             bulletList.Draw(window);
-            player.Draw(window, deltaTime);
             itemPink.Draw(window, deltaTime);
             itemTurbo.Draw(window, deltaTime);
             itemHeart.Draw(window, deltaTime);
@@ -765,12 +754,13 @@ int main()
                 meteorlist.Draw(window, deltaTime);
             for (Enemy& enemylist : enemylist)
                 enemylist.Draw(window, deltaTime);
+            player.Draw(window, deltaTime);
             window.draw(playerHP);
             window.draw(score);
             window.draw(text);
             heart.Draw(window);
-            for (Enemy& enemylist2 : enemylist2)
-                enemylist2.Draw(window, deltaTime);
+            //for (Enemy& enemylist2 : enemylist2)
+            //    enemylist2.Draw(window, deltaTime);
 
             window.display();
         }
